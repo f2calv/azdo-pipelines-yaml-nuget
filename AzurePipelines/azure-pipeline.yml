@@ -35,7 +35,7 @@ resources:
 variables:
   buildConfiguration: Release
   buildPlatform: 'Any CPU'
-  buildVersion: 1.0.0.$(Build.BuildId)
+  #PackageVersion: 1.0.0.$(Build.BuildId)
   vmImage: windows-latest
   #ARTIFACT_FEED_ID: 'MyInternalFeed'
   ProjectName: MyPkgLib
@@ -43,6 +43,7 @@ variables:
   major: 1
   minor: 0
   patch: $[counter('myversioncounter', 0)]
+  PackageVersion: $(major).$(minor).$(patch)
 
 stages:
 

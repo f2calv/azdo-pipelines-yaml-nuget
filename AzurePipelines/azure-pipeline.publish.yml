@@ -5,25 +5,25 @@ jobs:
   steps:
   
   #Download artifact to: d:\a\1\a
-  - task: DownloadPipelineArtifact@1
+  #- task: DownloadPipelineArtifact@1
 
-  #- task: DotNetCoreCLI@2
-  #  displayName: dotnet pack
-  #  inputs:
-  #    command: pack
-  #    configuration: '$(buildConfiguration)'
-  #    packagesToPack: '**/$(ProjectName).csproj' # Required when command == pack
-  #    #packDirectory: '$(Build.ArtifactStagingDirectory)' # Optional
-  #    #nobuild: false # Optional
-  #    #versioningScheme: 'byBuildNumber'#uses name above
-  #    versioningScheme: byEnvVar      # Options: off, byPrereleaseNumber, byEnvVar, byBuildNumber
-  #    versionEnvVar: buildVersion     # Required when versioningScheme == byEnvVar
-  #    #majorVersion: '1'
-  #    #minorVersion: '0'
-  #    #patchVersion: '1'
-  #    #buildProperties: # Optional
-  #    #verbosityPack: 'detailed' # Options: quiet, minimal, normal, detailed, diagnostic
-  #    includeSymbols: true
+  - task: DotNetCoreCLI@2
+    displayName: dotnet pack
+    inputs:
+      command: pack
+      configuration: '$(buildConfiguration)'
+      packagesToPack: '**/$(ProjectName).csproj' # Required when command == pack
+      #packDirectory: '$(Build.ArtifactStagingDirectory)' # Optional
+      #nobuild: false # Optional
+      #versioningScheme: 'byBuildNumber'#uses name above
+      versioningScheme: byEnvVar      # Options: off, byPrereleaseNumber, byEnvVar, byBuildNumber
+      versionEnvVar: PackageVersion   # Required when versioningScheme == byEnvVar
+      #majorVersion: '1'
+      #minorVersion: '0'
+      #patchVersion: '1'
+      #buildProperties: # Optional
+      #verbosityPack: 'detailed' # Options: quiet, minimal, normal, detailed, diagnostic
+      #includeSymbols: true
   
   #echo d:\a\1\a/drop/MyPkgLib/MyPkgLib.csproj
   #- script: echo $(Build.ArtifactStagingDirectory)/drop/$(ProjectName)/$(ProjectName).csproj
@@ -33,22 +33,21 @@ jobs:
 
   #WORKING - because it rebuilds+restores
   #dotnet pack MyPkgLib/MyPkgLib.csproj -c Release /p:PackageVersion=1.0.7 --output d:\a\1\a
-  #- script: dotnet pack $(ProjectName)/$(ProjectName).csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory)
+  #- script: dotnet pack $(ProjectName)/$(ProjectName).csproj -c $(buildConfiguration) /p:PackageVersion=$(PackageVersion) --output $(Build.ArtifactStagingDirectory)
 
-
-  - script: dotnet restore
-  - script: dotnet pack $(ProjectName)/$(ProjectName).csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory) --no-build
-
+  #BROKEN - found packages, but can't find build
+  #- script: dotnet restore
+  #- script: dotnet pack $(ProjectName)/$(ProjectName).csproj -c $(buildConfiguration) /p:PackageVersion=$(PackageVersion) --output $(Build.ArtifactStagingDirectory) --no-build
 
   #BROKEN - can't find
   #dotnet pack MyPkgLib/MyPkgLib.csproj -c Release /p:PackageVersion=1.0.8 --output d:\a\1\a --no-build --no-restore
-  #- script: dotnet pack $(ProjectName)/$(ProjectName).csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
+  #- script: dotnet pack $(ProjectName)/$(ProjectName).csproj -c $(buildConfiguration) /p:PackageVersion=$(PackageVersion) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
 
-  #- script: dotnet pack $(Build.ArtifactStagingDirectory)/drop/$(ProjectName)/$(ProjectName).csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
+  #- script: dotnet pack $(Build.ArtifactStagingDirectory)/drop/$(ProjectName)/$(ProjectName).csproj -c $(buildConfiguration) /p:PackageVersion=$(PackageVersion) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
 
-  #- script: dotnet pack $(System.ArtifactsDirectory)/$(ProjectName)/$(ProjectName).csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
+  #- script: dotnet pack $(System.ArtifactsDirectory)/$(ProjectName)/$(ProjectName).csproj -c $(buildConfiguration) /p:PackageVersion=$(PackageVersion) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
 
-  #- script: dotnet pack $(System.ArtifactsDirectory)/drop/$(ProjectName)/$(ProjectName).csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
+  #- script: dotnet pack $(System.ArtifactsDirectory)/drop/$(ProjectName)/$(ProjectName).csproj -c $(buildConfiguration) /p:PackageVersion=$(PackageVersion) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
   
   #- task: PublishBuildArtifacts@1
   #  displayName: perform artifact drop
