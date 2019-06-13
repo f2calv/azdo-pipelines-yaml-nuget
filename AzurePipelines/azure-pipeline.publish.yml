@@ -13,7 +13,7 @@ jobs:
       command: pack
       configuration: '$(buildConfiguration)'
       packagesToPack: '**/$(ProjectName).csproj' # Required when command == pack
-      #packDirectory: '$(Build.ArtifactStagingDirectory)' # Optional
+      packDirectory: '$(Build.ArtifactStagingDirectory)' # Optional
       nobuild: true # Optional
       #versioningScheme: 'byBuildNumber'#uses name above
       versioningScheme: byEnvVar      # Options: off, byPrereleaseNumber, byEnvVar, byBuildNumber
