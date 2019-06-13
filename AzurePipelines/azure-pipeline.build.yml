@@ -8,21 +8,11 @@ jobs:
     displayName: dotnet restore script
     inputs:
       command: 'restore'
-      #projects: '**/$(ProjectName).csproj'
-      #projects: '**/$(ProjectName).sln'
       projects: '$(SolutionName).sln'
   
   - task: DotNetCoreCLI@2
     displayName: dotnet build
     inputs:
       command: build
-      #projects: '**/$(ProjectName).csproj'
-      #projects: '**/$(ProjectName).sln'
       projects: '$(SolutionName).sln'
       arguments: '--configuration $(buildConfiguration)'
-
-  - task: PublishPipelineArtifact@0
-    #displayName: publish pipeline artifact
-    #inputs:
-    #  artifactName: $(projectName)/$(buildConfiguration)
-    #  targetPath: $(Build.ArtifactStagingDirectory)
