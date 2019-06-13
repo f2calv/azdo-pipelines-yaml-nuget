@@ -4,11 +4,14 @@
     <TargetFrameworks>net472;netstandard2.0</TargetFrameworks>
   </PropertyGroup>
 
-  <!--https://docs.microsoft.com/en-us/dotnet/standard/library-guidance/nuget-->
+  <!--
+  https://docs.microsoft.com/en-us/dotnet/standard/library-guidance/nuget
+  https://docs.microsoft.com/en-us/nuget/reference/id-prefix-reservation
+  -->
   <PropertyGroup>
     <!--<AssemblyName>MyPkgLib</AssemblyName>-->
     <!--<PackageId>MyPkgLib</PackageId>-->
-    <PackageVersion>1.1.1</PackageVersion>
+    <!--<PackageVersion>1.1.1</PackageVersion>-->
     <Authors>Alex Vincent</Authors>
     <!--<Product>MyPackage</Product>-->
     <Description>Demonstration nuget package deployed with Azure DevOps using a CI/CD YAML pipeline.</Description>
