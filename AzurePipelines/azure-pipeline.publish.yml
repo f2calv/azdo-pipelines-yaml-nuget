@@ -15,9 +15,8 @@ jobs:
       packagesToPack: '**/$(ProjectName).csproj' # Required when command == pack
       #packDirectory: '$(Build.ArtifactStagingDirectory)' # Optional
       #nobuild: true # Optional
-      versioningScheme: 'byBuildNumber' #uses name above
-      #versioningScheme: byEnvVar      # Options: off, byPrereleaseNumber, byEnvVar, byBuildNumber
-      #versionEnvVar: PackageVersion   # Required when versioningScheme == byEnvVar
+      versioningScheme: byEnvVar      # Options: off, byPrereleaseNumber, byEnvVar, byBuildNumber
+      versionEnvVar: PackageVersion   # Required when versioningScheme == byEnvVar
       #majorVersion: $(major)
       #minorVersion: $(minor)
       #patchVersion: $(patch)
