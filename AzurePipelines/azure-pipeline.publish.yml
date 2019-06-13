@@ -3,6 +3,8 @@ jobs:
   pool:
     vmImage: $(vmImage)
   steps:
+  - task: DownloadPipelineArtifact@1
+
   #- task: DotNetCoreCLI@2
   #  displayName: dotnet pack
   #  inputs:
