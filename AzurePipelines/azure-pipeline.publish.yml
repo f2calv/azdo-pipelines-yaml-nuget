@@ -14,7 +14,7 @@ jobs:
       configuration: '$(buildConfiguration)'
       packagesToPack: '**/$(ProjectName).csproj' # Required when command == pack
       #packDirectory: '$(Build.ArtifactStagingDirectory)' # Optional
-      #nobuild: false # Optional
+      nobuild: true # Optional
       #versioningScheme: 'byBuildNumber'#uses name above
       versioningScheme: byEnvVar      # Options: off, byPrereleaseNumber, byEnvVar, byBuildNumber
       versionEnvVar: PackageVersion   # Required when versioningScheme == byEnvVar
@@ -22,7 +22,7 @@ jobs:
       #minorVersion: '0'
       #patchVersion: '1'
       #buildProperties: # Optional
-      #verbosityPack: 'detailed' # Options: quiet, minimal, normal, detailed, diagnostic
+      verbosityPack: normal # Options: quiet, minimal, normal, detailed, diagnostic
       #includeSymbols: true
   
   #echo d:\a\1\a/drop/MyPkgLib/MyPkgLib.csproj
