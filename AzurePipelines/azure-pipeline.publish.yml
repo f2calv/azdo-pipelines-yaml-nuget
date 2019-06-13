@@ -23,6 +23,9 @@ jobs:
   #    #verbosityPack: 'detailed' # Options: quiet, minimal, normal, detailed, diagnostic
   #    includeSymbols: true
   
+  - script: echo $(Build.ArtifactStagingDirectory)/drop/$(ProjectName)/$(ProjectName).csproj
+  - script: echo $(System.ArtifactsDirectory)/drop/$(ProjectName)/$(ProjectName).csproj
+
   #- script: dotnet pack $(ProjectName)/$(ProjectName).csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
   - script: dotnet pack $(Build.ArtifactStagingDirectory)/drop/$(ProjectName)/$(ProjectName).csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
 
