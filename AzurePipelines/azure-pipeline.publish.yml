@@ -22,7 +22,7 @@ jobs:
   #    includeSymbols: true
   
   - script: dotnet pack $(ProjectName)/$(ProjectName).csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
-      condition: and(succeeded(), or(eq(variables['Build.SourceBranchName'], 'master')))
+      condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'master'))
   #- task: PublishBuildArtifacts@1
   #  displayName: perform artifact drop
   
