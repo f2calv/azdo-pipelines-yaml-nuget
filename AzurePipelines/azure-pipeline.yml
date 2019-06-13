@@ -50,9 +50,9 @@ stages:
   jobs:
   - template: azure-pipeline.build.yml
 
-- stage: Test
-  jobs:
-  - template: azure-pipeline.test.yml
+# - stage: Test
+#   jobs:
+#   - template: azure-pipeline.test.yml
 
 - stage: Publish
   jobs:
