@@ -37,8 +37,9 @@ variables:
   buildPlatform: 'Any CPU'
   buildVersion: 1.0.0.$(Build.BuildId)
   vmImage: ubuntu-latest
-  ARTIFACT_FEED_ID: 'MyInternalFeed'
+  #ARTIFACT_FEED_ID: 'MyInternalFeed'
   ProjectName: MyPkgLib
+  SolutionName: azdo-pipelines-yaml-nuget
   major: 1
   minor: 0
   patch: $[counter('myversioncounter', 0)]

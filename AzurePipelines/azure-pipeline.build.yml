@@ -10,7 +10,7 @@ jobs:
       command: 'restore'
       #projects: '**/$(ProjectName).csproj'
       #projects: '**/$(ProjectName).sln'
-      projects: '$(ProjectName).sln'
+      projects: '$(SolutionName).sln'
   
   - task: DotNetCoreCLI@2
     displayName: dotnet build
@@ -18,5 +18,5 @@ jobs:
       command: build
       #projects: '**/$(ProjectName).csproj'
       #projects: '**/$(ProjectName).sln'
-      projects: '$(ProjectName).sln'
+      projects: '$(SolutionName).sln'
       arguments: '--configuration $(buildConfiguration)'
