@@ -1,0 +1,58 @@
+#https://docs.microsoft.com/azure/devops/pipelines/yaml-schema
+#https://docs.microsoft.com/en-us/azure/devops/pipelines/artifacts/nuget?view=azure-devops&tabs=yaml
+#https://docs.microsoft.com/en-us/azure/devops/pipelines/artifacts/nuget?view=azure-devops&tabs=yaml#publish-packages
+#https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/package/nuget?view=azure-devops
+
+
+#https://samlearnsazure.blog/2019/03/08/using-azure-artifacts-to-create-our-own-nuget-package/
+#https://whereslou.com/2018/09/versioning-and-publishing-nuget-packages-automatically-using-azure-devops-pipelines/
+#http://loudandabrasive.com/effective-nuget-versioning-in-azure-devops
+
+#https://blog.magnusmontin.net/2018/12/11/using-azure-pipelines-to-publish-your-github-project-to-nuget/
+#nuget packaging symbols
+#https://docs.microsoft.com/en-us/nuget/create-packages/symbol-packages-snupkg
+#https://github.com/NuGet/Home/wiki/NuGet-Package-Debugging-&-Symbols-Improvements
+
+#name: 20190530.10 <-- this is the default
+#name: $(Build.DefinitionName)-$(Date:yyyyMMdd)$(Rev:.r) # Populates $(Build.BuildNumber)
+#name: $(Build.DefinitionName)-$(Major).$(Minor).$(Rev:.r)
+#name: $(BuildDefinitionName)_$(Year:yyyy).$(Month).$(DayOfMonth)$(Rev:.r) # AzDO_2019.5.30.1
+
+trigger:
+  batch: "true"
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - /AzurePipelines/MyLibrary/
+    - /MyPkgLib/
+    - /MyPkgLib.Tests/
+
+resources:
+- repo: self
+
+variables:
+  buildConfiguration: Release
+  buildPlatform: 'Any CPU'
+  buildVersion: 1.0.0.$(Build.BuildId)
+  vmImage: ubuntu-latest
+  ARTIFACT_FEED_ID: 'MyInternalFeed'
+  ProjectName: MyPkgLib
+  major: 1
+  minor: 0
+  patch: $[counter('myversioncounter', 0)]
+
+stages:
+
+- stage: Build
+  jobs:
+  - template: azure-pipeline.build.yml
+
+- stage: Test
+  jobs:
+  - template: azure-pipeline.test.yml
+
+- stage: Publish
+  jobs:
+  - template: azure-pipeline.publish.yml

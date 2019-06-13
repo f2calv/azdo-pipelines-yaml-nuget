@@ -1,0 +1,44 @@
+jobs:
+- job: PublishJob
+  pool:
+    vmImage: $(vmImage)
+  steps:
+  #- task: DotNetCoreCLI@2
+  #  displayName: dotnet pack
+  #  inputs:
+  #    command: pack
+  #    configuration: '$(buildConfiguration)'
+  #    packagesToPack: '**/$(ProjectName).csproj' # Required when command == pack
+  #    #packDirectory: '$(Build.ArtifactStagingDirectory)' # Optional
+  #    #nobuild: false # Optional
+  #    #versioningScheme: 'byBuildNumber'#uses name above
+  #    versioningScheme: byEnvVar      # Options: off, byPrereleaseNumber, byEnvVar, byBuildNumber
+  #    versionEnvVar: buildVersion     # Required when versioningScheme == byEnvVar
+  #    #majorVersion: '1'
+  #    #minorVersion: '0'
+  #    #patchVersion: '1'
+  #    #buildProperties: # Optional
+  #    #verbosityPack: 'detailed' # Options: quiet, minimal, normal, detailed, diagnostic
+  #    includeSymbols: true
+  
+  - script: dotnet pack $(ProjectName)/$(ProjectName).csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
+      condition: and(succeeded(), or(eq(variables['Build.SourceBranchName'], 'master')))
+  #- task: PublishBuildArtifacts@1
+  #  displayName: perform artifact drop
+  
+  # Push NuGet packages.
+  #- task: DotNetCoreCLI@2
+  #  displayName: dotnet push
+  #  inputs:
+  #    command: push
+  #    nuGetFeedType: internal # Required when command == push. Options: internal, external
+  #    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg' # Required when command == push
+  #    publishVstsFeed: '$(ARTIFACT_FEED_ID)' # Required when command == push && NuGetFeedType == internal
+  #    #publishFeedCredentials: # Required when command == push && NuGetFeedType == external
+
+  - task: NuGetCommand@2
+    inputs:
+      command: push
+      nuGetFeedType: external
+      publishFeedCredentials: f2calvNuGetInt
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'

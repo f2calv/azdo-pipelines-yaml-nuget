@@ -1,0 +1,11 @@
+jobs:
+- job: TestJob
+  pool:
+    vmImage: $(vmImage)
+  steps:
+  - task: DotNetCoreCLI@2
+    displayName: dotnet test
+    inputs:
+      command: test
+      projects: '**/*.Tests/*.csproj'
+      arguments: '--configuration $(buildConfiguration)'
