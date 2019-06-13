@@ -20,3 +20,9 @@ jobs:
       #projects: '**/$(ProjectName).sln'
       projects: '$(SolutionName).sln'
       arguments: '--configuration $(buildConfiguration)'
+
+  - task: PublishPipelineArtifact@0
+    #displayName: publish pipeline artifact
+    #inputs:
+    #  artifactName: $(projectName)/$(buildConfiguration)
+    #  targetPath: $(Build.ArtifactStagingDirectory)
