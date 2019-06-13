@@ -12,6 +12,8 @@
     <!--<AssemblyName>MyPkgLib</AssemblyName>-->
     <!--<PackageId>MyPkgLib</PackageId>-->
     <!--<PackageVersion>1.1.1</PackageVersion>-->
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <VersionSuffix>alpha</VersionSuffix>
     <Authors>Alex Vincent</Authors>
     <!--<Product>MyPackage</Product>-->
     <Description>Demonstration nuget package deployed with Azure DevOps using a CI/CD YAML pipeline.</Description>
