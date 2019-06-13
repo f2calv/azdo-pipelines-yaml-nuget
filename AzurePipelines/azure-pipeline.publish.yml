@@ -26,14 +26,19 @@ jobs:
   #    includeSymbols: true
   
   #echo d:\a\1\a/drop/MyPkgLib/MyPkgLib.csproj
-  - script: echo $(Build.ArtifactStagingDirectory)/drop/$(ProjectName)/$(ProjectName).csproj
+  #- script: echo $(Build.ArtifactStagingDirectory)/drop/$(ProjectName)/$(ProjectName).csproj
 
   #echo d:\a\1\a/drop/MyPkgLib/MyPkgLib.csproj
-  - script: echo $(System.ArtifactsDirectory)/drop/$(ProjectName)/$(ProjectName).csproj
+  #- script: echo $(System.ArtifactsDirectory)/drop/$(ProjectName)/$(ProjectName).csproj
 
-  #WORKING - because it rebuilds
+  #WORKING - because it rebuilds+restores
   #dotnet pack MyPkgLib/MyPkgLib.csproj -c Release /p:PackageVersion=1.0.7 --output d:\a\1\a
   #- script: dotnet pack $(ProjectName)/$(ProjectName).csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory)
+
+
+  - script: dotnet restore
+  - script: dotnet pack $(ProjectName)/$(ProjectName).csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory) --no-build
+
 
   #BROKEN - can't find
   #dotnet pack MyPkgLib/MyPkgLib.csproj -c Release /p:PackageVersion=1.0.8 --output d:\a\1\a --no-build --no-restore
@@ -43,7 +48,7 @@ jobs:
 
   #- script: dotnet pack $(System.ArtifactsDirectory)/$(ProjectName)/$(ProjectName).csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
 
-  - script: dotnet pack $(System.ArtifactsDirectory)/drop/$(ProjectName)/$(ProjectName).csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
+  #- script: dotnet pack $(System.ArtifactsDirectory)/drop/$(ProjectName)/$(ProjectName).csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
   
   #- task: PublishBuildArtifacts@1
   #  displayName: perform artifact drop
