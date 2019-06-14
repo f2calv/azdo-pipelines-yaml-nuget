@@ -8,13 +8,13 @@ jobs:
   #   inputs:
   #     command: test
   #     projects: '**/*.Tests/*.csproj'
-  #     arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./CodeCoverage'
+  #     arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
   #     #nobuild: true    #need to figure out PipelineArtifacts
 
   - script: |
       dotnet --version
       dir $(Build.SourcesDirectory)\MyPkgLib.Tests\
-      dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./CodeCoverage
+      dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
       dir $(Build.SourcesDirectory)\MyPkgLib.Tests\
 
   # Generate the report using ReportGenerator (https://github.com/danielpalme/ReportGenerator)
@@ -22,7 +22,7 @@ jobs:
   - script: |
       dotnet tool install -g dotnet-reportgenerator-globaltool
       cd
-      reportgenerator -reports:$(Build.SourcesDirectory)/**/*.Tests/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines;Cobertura
+      reportgenerator -reports:$(Build.SourcesDirectory)/*.Tests/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines;Cobertura
     displayName: Create Code coverage report
 
   # Publish the code coverage result (summary and web site)
