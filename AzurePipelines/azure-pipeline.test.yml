@@ -15,7 +15,7 @@ jobs:
   - script: |
       dotnet --version
       dir $(Build.SourcesDirectory)\MyPkgLib.Tests\
-      dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj --collect:"code coverage"
+      dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj --collect:"code coverage" /p:CoverletOutputFormat=cobertura
       cd
       dir $(Build.SourcesDirectory)\MyPkgLib.Tests\
 
