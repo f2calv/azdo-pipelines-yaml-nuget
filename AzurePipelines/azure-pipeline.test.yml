@@ -9,7 +9,7 @@ jobs:
       command: test
       projects: '**/*.Tests/*.csproj'
       #arguments: '--configuration $(buildConfiguration) --logger trx'
-      arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
+      arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.ArtifactStagingDirectory)'
       #nobuild: true    #need to figure out PipelineArtifacts
 
   - task: PublishPipelineArtifact@0
