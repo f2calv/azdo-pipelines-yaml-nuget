@@ -29,9 +29,9 @@ variables:
 
 stages:
 
-# - stage: Build
-#   jobs:
-#   - template: azure-pipeline.build.yml
+- stage: Build
+  jobs:
+  - template: azure-pipeline.build.yml
 
 - stage: Test
   jobs:

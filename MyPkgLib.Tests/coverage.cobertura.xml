@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<coverage line-rate="0.875" branch-rate="1" version="1.9" timestamp="1560520677" lines-covered="7" lines-valid="8" branches-covered="0" branches-valid="0">
+  <sources>
+    <source></source>
+  </sources>
+  <packages>
+    <package name="MyPkgLib" line-rate="0.875" branch-rate="1" complexity="2">
+      <classes>
+        <class name="CasCap.TestClass1" filename="C:\Users\alvincen\source\repos\github\azdo-pipelines-yaml-nuget\MyPkgLib\Class1.cs" line-rate="0.875" branch-rate="1" complexity="2">
+          <methods>
+            <method name="Add" signature="(System.Int32,System.Int32)" line-rate="1" branch-rate="1">
+              <lines>
+                <line number="15" hits="1" branch="False" />
+                <line number="16" hits="1" branch="False" />
+                <line number="17" hits="1" branch="False" />
+              </lines>
+            </method>
+            <method name="ThrowDivideByZeroException" signature="()" line-rate="0.8" branch-rate="1">
+              <lines>
+                <line number="20" hits="1" branch="False" />
+                <line number="21" hits="1" branch="False" />
+                <line number="22" hits="1" branch="False" />
+                <line number="23" hits="1" branch="False" />
+                <line number="24" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="15" hits="1" branch="False" />
+            <line number="16" hits="1" branch="False" />
+            <line number="17" hits="1" branch="False" />
+            <line number="20" hits="1" branch="False" />
+            <line number="21" hits="1" branch="False" />
+            <line number="22" hits="1" branch="False" />
+            <line number="23" hits="1" branch="False" />
+            <line number="24" hits="0" branch="False" />
+          </lines>
+        </class>
+      </classes>
+    </package>
+  </packages>
+</coverage>
