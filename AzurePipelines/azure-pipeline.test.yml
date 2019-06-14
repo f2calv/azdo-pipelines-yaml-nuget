@@ -3,18 +3,18 @@ jobs:
   pool:
     vmImage: $(vmImage)
   steps:
-  - task: DotNetCoreCLI@2
-    displayName: dotnet test
-    inputs:
-      command: test
-      projects: '**/*.Tests/*.csproj'
-      arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
-      #nobuild: true    #need to figure out PipelineArtifacts
+  # - task: DotNetCoreCLI@2
+  #   displayName: dotnet test + calculate code coverage via coverlet
+  #   inputs:
+  #     command: test
+  #     projects: '**/*.Tests/*.csproj'
+  #     arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
+  #     #nobuild: true    #need to figure out PipelineArtifacts
 
-  # - script: dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
-  #   displayName: run tests and generate coverlet files
+  #dotnet.exe test d:\a\1\s\MyPkgLib.Tests\MyPkgLib.Tests.csproj --logger trx --results-directory d:\a\_temp --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
 
-  # - script: dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura --logger "trx;LogFileName=$1results.trx" --results-directory "/TestResults" -c Release
+  - script: dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj --logger trx --results-directory $(Agent.TempDirectory) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+    displayName: dotnet test + calculate code coverage via coverlet
 
   - script: dir *.cobertura.xml /S /B
     displayName: DEBUG search for coverlet files
@@ -25,11 +25,6 @@ jobs:
       dotnet tool install -g dotnet-reportgenerator-globaltool
       reportgenerator -reports:$(Build.SourcesDirectory)/*.Tests/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines;Cobertura
     displayName: Create Code coverage report
-
-  # - script: |
-  #     echo $(Build.SourcesDirectory)/CodeCoverage
-  #     dir $(Build.SourcesDirectory)/CodeCoverage
-  #   displayName: DEBUG show cobertura report files
 
   # Publish the code coverage result (summary and web site)
   # The summary allows to view the coverage percentage in the summary tab
