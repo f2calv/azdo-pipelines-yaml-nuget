@@ -20,7 +20,7 @@ variables:
   vmImage: windows-latest
   ProjectName: MyPkgLib
   SolutionName: azdo-pipelines-yaml-nuget
-  publishFeedCredentials: f2calvNuGet
+  publishFeedCredentials: f2calvNuGetInt
   Version.Major: 1
   Version.Minor: 1
   Version.PackageMajorMinor: '$(publishFeedCredentials)-$(ProjectName)-$(Version.Major).$(Version.Minor)'

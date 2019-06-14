@@ -3,20 +3,20 @@ jobs:
   pool:
     vmImage: $(vmImage)
   steps:
-  # - task: DotNetCoreCLI@2
-  #   displayName: dotnet test + calculate code coverage via coverlet
-  #   inputs:
-  #     command: test
-  #     projects: '**/*.Tests/*.csproj'
-  #     arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
-  #     #nobuild: true    #need to figure out PipelineArtifacts
+  - task: DotNetCoreCLI@2
+    displayName: dotnet test + calculate code coverage via coverlet
+    inputs:
+      command: test
+      projects: '**/*.Tests/*.csproj'
+      arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
+      #nobuild: true    #need to figure out PipelineArtifacts
 
   - script: echo Version.PackageMajorMinor=$(Version.PackageMajorMinor)
     displayName: DEBUG PackageMajorMinor
 
-  #below script is *almost* the same as DotNetCoreCLI task above - however doesn't allow wildcard matching
-  - script: dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj --logger trx --results-directory $(Agent.TempDirectory) --configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
-    displayName: dotnet test + calculate code coverage via coverlet
+  #below script is *almost* the same as the DotNetCoreCLI dotnet test above - however doesn't allow wildcard matching AND the test results don't display??
+  #- script: dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj --logger trx --results-directory $(Agent.TempDirectory) --configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+  #  displayName: dotnet test + calculate code coverage via coverlet
 
   - script: dir *.cobertura.xml /S /B
     displayName: DEBUG search for coverlet files
