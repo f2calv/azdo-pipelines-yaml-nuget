@@ -2,6 +2,8 @@
 ### Public NuGet Package CI/CD using YAML Azure DevOps Pipeline
 
 [![Build Status](https://dev.azure.com/f2calv/github/_apis/build/status/f2calv.azdo-pipelines-yaml-nuget?branchName=master)](https://dev.azure.com/f2calv/github/_build/latest?definitionId=4&branchName=master)
+[![NuGet Version](https://img.shields.io/nuget/v/MyPkgLib.svg?style=flat)](https://www.nuget.org/packages/MyPkgLib/)
+[![NuGet](https://img.shields.io/nuget/dt/MyPkgLib.svg)](https://www.nuget.org/packages/MyPkgLib)
 
 This repository is comprised of three .NET Core 2.2 projects - each project is *very* basic;
 - 1 x Class Library (i.e. which is packaged and deployed as a public NuGet package)
