@@ -12,10 +12,10 @@ jobs:
       arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
       #nobuild: true    #need to figure out PipelineArtifacts
 
-  # - task: PublishPipelineArtifact@0
-  #   inputs:
-  #     artifactName: drop
-  #     targetPath: $(Build.ArtifactStagingDirectory)
+  - task: PublishPipelineArtifact@0
+    inputs:
+      artifactName: drop
+      targetPath: $(Build.ArtifactStagingDirectory)
 
   # Generate the report using ReportGenerator (https://github.com/danielpalme/ReportGenerator)
   # First install the tool on the machine, then run it
