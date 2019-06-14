@@ -28,3 +28,6 @@ Additional guidance on including PDB/Symbols and SourceLink;
 - https://github.com/dotnet/sourcelink#using-source-link-in-net-projects
 - https://github.com/NuGet/Home/wiki/NuGet-Package-Debugging-&-Symbols-Improvements
 - https://docs.microsoft.com/en-us/nuget/create-packages/symbol-packages-snupkg
+
+Unit test & code coverage solution;
+-https://www.meziantou.net/computing-code-coverage-for-a-dotnet-core-project-with-azure-devops-and-coverlet.htm
