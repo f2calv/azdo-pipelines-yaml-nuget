@@ -1,10 +1,15 @@
 trigger:
-- master
+  batch: true
+  branches:
+    include:
+    - master
   paths:
     include:
     - /AzurePipelines/
     - /MyPkgLib/
     - /MyPkgLib.Tests/
+    exclude:
+    - README.md
 
 resources:
 - repo: self
