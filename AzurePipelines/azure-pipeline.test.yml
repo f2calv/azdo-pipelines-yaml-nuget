@@ -3,19 +3,19 @@ jobs:
   pool:
     vmImage: $(vmImage)
   steps:
-  - task: DotNetCoreCLI@2
-    displayName: dotnet test
-    inputs:
-      command: test
-      projects: '**/*.Tests/*.csproj'
-      arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./CodeCoverage'
-      #nobuild: true    #need to figure out PipelineArtifacts
+  # - task: DotNetCoreCLI@2
+  #   displayName: dotnet test
+  #   inputs:
+  #     command: test
+  #     projects: '**/*.Tests/*.csproj'
+  #     arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./CodeCoverage'
+  #     #nobuild: true    #need to figure out PipelineArtifacts
 
-  # - script: |
-  #     dotnet --version
-  #     dir $(Build.SourcesDirectory)\MyPkgLib.Tests\
-  #     dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./CodeCoverage
-  #     dir $(Build.SourcesDirectory)\MyPkgLib.Tests\
+  - script: |
+      dotnet --version
+      dir $(Build.SourcesDirectory)\MyPkgLib.Tests\
+      dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./CodeCoverage
+      dir $(Build.SourcesDirectory)\MyPkgLib.Tests\
 
   # Generate the report using ReportGenerator (https://github.com/danielpalme/ReportGenerator)
   # First install the tool on the machine, then run it
@@ -33,4 +33,4 @@ jobs:
     inputs:
       codeCoverageTool: Cobertura
       summaryFileLocation: '$(Build.SourcesDirectory)/CodeCoverage/Cobertura.xml'
-      reportDirectory: '$(Build.SourcesDirectory)/CodeCoverage'
+      reportDirectory: $(Build.SourcesDirectory)/CodeCoverage/
