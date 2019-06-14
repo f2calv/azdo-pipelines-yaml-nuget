@@ -14,9 +14,9 @@ The library includes references to both Entity Framework 6 and Entity Framework 
 All YAML is contained within the repository in the AzurePipelines directory.
 
 The multi-stage pipeline has 3 stages, Build, Test & Deploy(Push) which;
-1) build both projects
-2) run all tests
-3) pack the class library and push it to [NuGet staging server](https://int.nugettest.org/packages/MyPkgLib/).
+1) build the class library projects
+2) run all tests and publish code coverage report
+3) pack the class library and push it either [NuGet staging server](https://int.nugettest.org/packages/MyPkgLib/) or [NuGet server](https://www.nuget.org/packages/MyPkgLib).
 
 Sources;
 - https://docs.microsoft.com/azure/devops/pipelines/yaml-schema
@@ -31,3 +31,6 @@ Additional guidance on including PDB/Symbols and SourceLink;
 
 Unit test & code coverage solution;
 -https://www.meziantou.net/computing-code-coverage-for-a-dotnet-core-project-with-azure-devops-and-coverlet.htm
+
+Issues;
+- I am as yet unable to pass the build project from stage #1 to stage #2 for the tests and then to stage #3 for the publish... so currently the build happens three times over. :(
