@@ -10,10 +10,12 @@ jobs:
       command: pack
       configuration: '$(buildConfiguration)'
       packagesToPack: '**/$(ProjectName).csproj' # Required when command == pack
+      #packDirectory: '$(Build.ArtifactStagingDirectory)'   #this should be the Pipeline download directory but didn't figure that out yet
       versioningScheme: byEnvVar      # Options: off, byPrereleaseNumber, byEnvVar, byBuildNumber
       versionEnvVar: PackageVersion   # Required when versioningScheme == byEnvVar
       verbosityPack: normal
-  
+      buildProperties: "-p:SymbolPackageFormat=snupkg"
+
   - task: NuGetCommand@2
     inputs:
       command: push
