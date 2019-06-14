@@ -10,11 +10,11 @@ jobs:
       command: pack
       configuration: '$(buildConfiguration)'
       packagesToPack: '**/$(ProjectName).csproj' # Required when command == pack
-      #packDirectory: '$(Build.ArtifactStagingDirectory)'   #this should be the Pipeline download directory but didn't figure that out yet
+      #packDirectory: '$(Build.ArtifactStagingDirectory)'   #this should be the Pipeline download directory but didn't figure out how to skip the second build yet
       versioningScheme: byEnvVar      # Options: off, byPrereleaseNumber, byEnvVar, byBuildNumber
       versionEnvVar: PackageVersion   # Required when versioningScheme == byEnvVar
       verbosityPack: normal
-      buildProperties: 'SymbolPackageFormat=snupkg'
+      #buildProperties: 'SymbolPackageFormat=snupkg'    #not needed because elements added to csproj
 
   - task: NuGetCommand@2
     inputs:
