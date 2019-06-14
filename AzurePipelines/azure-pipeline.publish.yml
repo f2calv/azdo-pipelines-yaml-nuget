@@ -16,11 +16,16 @@ jobs:
       verbosityPack: normal
       #buildProperties: 'SymbolPackageFormat=snupkg'    #not needed because elements added to csproj
 
+  - task: NuGetToolInstaller@0
+    inputs:
+      versionSpec: '5.0.2' 
+      #checkLatest: false # Optional
+
   - task: NuGetCommand@2
     inputs:
       command: push
       nuGetFeedType: external
-      publishFeedCredentials: f2calvNuGet
+      publishFeedCredentials: f2calvNuGetInt
       #packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
       packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.*nupkg'
       #$(Build.SourcesDirectory)/**/*.nupkg;!$(Build.SourcesDirectory)/**/*.symbols.nupkg
