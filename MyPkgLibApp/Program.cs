@@ -8,7 +8,7 @@ namespace CasCap
             var obj = new TestClass1();
             obj.ThrowDivideByZeroException();
 
-            Console.WriteLine("Hello World!");
+            Console.WriteLine($"Hello World @ {DateTime.UtcNow}");
 
             Console.ReadLine();
         }
