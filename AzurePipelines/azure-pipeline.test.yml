@@ -15,10 +15,14 @@ jobs:
   - script: |
       dotnet --version
       dir $(Build.SourcesDirectory)\MyPkgLib.Tests\
-      echo 'dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
-      dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+      dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj --collect:"code coverage"
       cd
       dir $(Build.SourcesDirectory)\MyPkgLib.Tests\
+
+      #echo 'dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
+      #dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+#--collect:"code coverage"
+#dotnet test --logger "trx;LogFileName=TestResults.trx" --results-directory ./BuildReports/UnitTests /p:CollectCoverage=true /p:CoverletOutput=BuildReports\Coverage\ /p:CoverletOutputFormat=cobertura
 
 #:\Program Files\dotnet\dotnet.exe" test d:\a\1\s\MyPkgLib.Tests\MyPkgLib.Tests.csproj --logger trx --results-directory d:\a\_temp --configuration Release --output d:\a\1\a /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./CodeCoverage
 #  - task: PublishPipelineArtifact@0
