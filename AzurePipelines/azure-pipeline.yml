@@ -22,16 +22,16 @@ variables:
   SolutionName: azdo-pipelines-yaml-nuget
   publishFeedCredentials: f2calvNuGet
   Version.Major: 1
-  Version.Minor: 0
+  Version.Minor: 1
   Version.PackageMajorMinor: '$(publishFeedCredentials)-$(ProjectName)-$(Version.Major).$(Version.Minor)'
   Version.Revision: $[counter(variables['Version.PackageMajorMinor'], 0)]
   PackageVersion: $(Version.Major).$(Version.Minor).$(Version.Revision)
 
 stages:
 
-# - stage: Build
-#   jobs:
-#   - template: azure-pipeline.build.yml
+- stage: Build
+  jobs:
+  - template: azure-pipeline.build.yml
 
 - stage: Test
   jobs:
