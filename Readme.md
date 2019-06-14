@@ -21,5 +21,6 @@ Sources;
 - https://blog.magnusmontin.net/2018/12/11/using-azure-pipelines-to-publish-your-github-project-to-nuget/
 - https://docs.microsoft.com/en-us/nuget/create-packages/symbol-packages-snupkg
 - https://github.com/NuGet/Home/wiki/NuGet-Package-Debugging-&-Symbols-Improvements
+- https://blog.nuget.org/20181116/Improved-debugging-experience-with-the-NuGet-org-symbol-server-and-snupkg.html
 
 [![Build Status](https://dev.azure.com/f2calv/github/_apis/build/status/f2calv.azdo-pipelines-yaml-nuget?branchName=master)](https://dev.azure.com/f2calv/github/_build/latest?definitionId=4&branchName=master)

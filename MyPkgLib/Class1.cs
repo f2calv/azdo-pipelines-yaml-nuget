@@ -15,5 +15,12 @@ namespace CasCap
         {
             return a + b;
         }
+
+        public void ThrowDivideByZeroException()
+        {
+            var a = 10;
+            var b = 0;
+            var c = a / b;
+        }
     }
 }
