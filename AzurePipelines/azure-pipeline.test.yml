@@ -3,15 +3,19 @@ jobs:
   pool:
     vmImage: $(vmImage)
   steps:
-  - task: DotNetCoreCLI@2
-    displayName: dotnet test
-    inputs:
-      command: test
-      projects: '**/*.Tests/*.csproj'
-      #arguments: '--configuration $(buildConfiguration) --logger trx'
-      arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./CodeCoverage'
-      #nobuild: true    #need to figure out PipelineArtifacts
+#  - task: DotNetCoreCLI@2
+#    displayName: dotnet test
+#    inputs:
+#      command: test
+#      projects: '**/*.Tests/*.csproj'
+#      #arguments: '--configuration $(buildConfiguration) --logger trx'
+#      arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./CodeCoverage'
+#      #nobuild: true    #need to figure out PipelineArtifacts
 
+  - script: |
+      dotnet test $(Build.SourcesDirectory)/MyPkgLib.Tests/MyPkgLib.Tests.csproj --results-directory $(Build.ArtifactStagingDirectory /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./CodeCoverage
+
+#:\Program Files\dotnet\dotnet.exe" test d:\a\1\s\MyPkgLib.Tests\MyPkgLib.Tests.csproj --logger trx --results-directory d:\a\_temp --configuration Release --output d:\a\1\a /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./CodeCoverage
   - task: PublishPipelineArtifact@0
     inputs:
       artifactName: drop
