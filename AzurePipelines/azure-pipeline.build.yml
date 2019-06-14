@@ -8,11 +8,17 @@ jobs:
     displayName: dotnet restore script
     inputs:
       command: 'restore'
-      projects: '$(SolutionName).sln'
+      #projects: '$(SolutionName).sln'
+      projects: |
+        **/$(ProjectName).csproj
+        **/$(ProjectName).Tests.csproj
   
   - task: DotNetCoreCLI@2
     displayName: dotnet build
     inputs:
       command: build
-      projects: '$(SolutionName).sln'
+      #projects: '$(SolutionName).sln'
+      projects: |
+        **/$(ProjectName).csproj
+        **/$(ProjectName).Tests.csproj
       arguments: '--configuration $(buildConfiguration)'
