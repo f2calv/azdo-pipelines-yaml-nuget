@@ -20,9 +20,10 @@ variables:
   vmImage: windows-latest
   ProjectName: MyPkgLib
   SolutionName: azdo-pipelines-yaml-nuget
+  publishFeedCredentials: f2calvNuGetInt
   Version.Major: 1
   Version.Minor: 0
-  Version.PackageMajorMinor: '$(ProjectName)-$(Version.Major).$(Version.Minor)'
+  Version.PackageMajorMinor: '$(publishFeedCredentials)-$(ProjectName)-$(Version.Major).$(Version.Minor)'
   Version.Revision: $[counter(variables['Version.PackageMajorMinor'], 0)]
   PackageVersion: $(Version.Major).$(Version.Minor).$(Version.Revision)
 
