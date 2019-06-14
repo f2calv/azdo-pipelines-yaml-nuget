@@ -16,8 +16,8 @@ steps:
   displayName: dotnet build
   inputs:
     projects: |
-      **/$(ProjectName).csproj
-      **/$(ProjectName).Tests.csproj
+      **/MyPkgLib.csproj
+      **/MyPkgLib.Tests.csproj
     arguments: '--configuration $(BuildConfiguration)'
 
 # Run all tests with "/p:CollectCoverage=true /p:CoverletOutputFormat=cobertura" to generate the code coverage file
