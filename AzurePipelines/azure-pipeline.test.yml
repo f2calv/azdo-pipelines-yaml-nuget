@@ -11,10 +11,9 @@ jobs:
   #     arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
   #     #nobuild: true    #need to figure out PipelineArtifacts
 
-  #dotnet.exe test d:\a\1\s\MyPkgLib.Tests\MyPkgLib.Tests.csproj --logger trx --results-directory d:\a\_temp --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
-
-  - script: dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj --logger trx --results-directory $(Agent.TempDirectory) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
-    displayName: dotnet test + calculate code coverage via coverlet
+  #below is same as DotNetCoreCLI task above - however doesn't allow wildcard matching
+  # - script: dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj --logger trx --results-directory $(Agent.TempDirectory) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+  #   displayName: dotnet test + calculate code coverage via coverlet
 
   - script: dir *.cobertura.xml /S /B
     displayName: DEBUG search for coverlet files
