@@ -20,10 +20,11 @@ variables:
   vmImage: windows-latest
   ProjectName: MyPkgLib
   SolutionName: azdo-pipelines-yaml-nuget
-  major: 1
-  minor: 0
-  patch: $[counter('myversioncounter', 0)]
-  PackageVersion: $(major).$(minor).$(patch)
+  Version.Major: 1
+  Version.Minor: 0
+  Version.PackageMajorMinor: '$(ProjectName)-$(Version.Major).$(Version.Minor)'
+  Version.Revision: $[counter(variables['Version.PackageMajorMinor'], 0)]
+  PackageVersion: $(Version.Major).$(Version.Minor).$(Version.Revision)
 
 stages:
 

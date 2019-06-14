@@ -20,5 +20,5 @@ jobs:
     inputs:
       command: push
       nuGetFeedType: external
-      publishFeedCredentials: f2calvNuGetInt
+      publishFeedCredentials: f2calvNuGet
       packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
