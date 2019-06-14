@@ -13,7 +13,7 @@ jobs:
 #      #nobuild: true    #need to figure out PipelineArtifacts
 
   - script: |
-      dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj --results-directory $(Build.SourcesDirectory) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./CodeCoverage
+      dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj --results-directory $(Build.SourcesDirectory) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
 
 #:\Program Files\dotnet\dotnet.exe" test d:\a\1\s\MyPkgLib.Tests\MyPkgLib.Tests.csproj --logger trx --results-directory d:\a\_temp --configuration Release --output d:\a\1\a /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./CodeCoverage
   - task: PublishPipelineArtifact@0
