@@ -8,10 +8,10 @@
 This repository is comprised of three .NET Core 2.2 projects - each project is *very* basic;
 - 1 x Class Library (i.e. which is packaged and deployed as a public NuGet package)
 - 1 x Unit Test Project
-- 1 x Console Application (uses to test debugging of pkg)
+- 1 x Console Application (uses to test debugging of package)
 
-The class library is an example of multi-targetting and targets .NET Standard 2.0 and .NET Framework 2.7.2.
-The library includes references to both Entity Framework 6 and Entity Framework Core along with some compiler directives in Class1.cs as an example of how to create a multi-targetted package.
+The class library is an example of multi-targeting and targets .NET Standard 2.0 and .NET Framework 2.7.2.
+The library includes references to both Entity Framework 6 and Entity Framework Core along with some compiler directives in Class1.cs as an example of how to create a multi-targeted package.
 
 All YAML is contained within the repository in the AzurePipelines directory.
 
