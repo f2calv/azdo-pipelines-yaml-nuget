@@ -13,6 +13,7 @@ jobs:
 #      #nobuild: true    #need to figure out PipelineArtifacts
 
   - script: |
+      dotnet --version
       dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
       cd
       dir $(Build.SourcesDirectory)\MyPkgLib.Tests\
