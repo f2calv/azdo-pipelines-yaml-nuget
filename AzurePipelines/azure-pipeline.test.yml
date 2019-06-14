@@ -19,8 +19,8 @@ jobs:
       cd
       dir $(Build.SourcesDirectory)\MyPkgLib.Tests\
 
-      #echo 'dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
-      #dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+#echo 'dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
+#dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
 #--collect:"code coverage"
 #dotnet test --logger "trx;LogFileName=TestResults.trx" --results-directory ./BuildReports/UnitTests /p:CollectCoverage=true /p:CoverletOutput=BuildReports\Coverage\ /p:CoverletOutputFormat=cobertura
 
