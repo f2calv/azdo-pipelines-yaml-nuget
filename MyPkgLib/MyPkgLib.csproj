@@ -11,7 +11,7 @@
     <PackageProjectUrl>https://github.com/f2calv/azdo-pipelines-yaml-nuget</PackageProjectUrl>
     <PackageLicenseExpression>Unlicense</PackageLicenseExpression>
     <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>    
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
