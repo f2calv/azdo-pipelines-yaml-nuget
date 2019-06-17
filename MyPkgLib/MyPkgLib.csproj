@@ -9,11 +9,9 @@
     <Description>Demonstration nuget package deployed with Azure DevOps using a CI/CD YAML pipeline.</Description>
     <PackageTags>yaml,azure,devops,pipeline</PackageTags>
     <PackageProjectUrl>https://github.com/f2calv/azdo-pipelines-yaml-nuget</PackageProjectUrl>
-  </PropertyGroup>
-
-  <PropertyGroup>
+    <PackageLicenseExpression>Unlicense</PackageLicenseExpression>
     <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>    
   </PropertyGroup>
 
   <ItemGroup>
