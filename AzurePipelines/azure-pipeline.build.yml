@@ -22,3 +22,11 @@ jobs:
         **/$(ProjectName).csproj
         **/$(ProjectName).Tests.csproj
       arguments: '--configuration $(buildConfiguration)'
+
+#todo: add in dotnet publish - handy for apps using portable framework and other types of deployment
+  - task: PublishPipelineArtifact@1
+    inputs:
+      artifactName: drop
+      #targetPath: 
+  #- publish: $(System.DefaultWorkingDirectory)/bin/WebApp
+  #  artifact: bin/WebApp
