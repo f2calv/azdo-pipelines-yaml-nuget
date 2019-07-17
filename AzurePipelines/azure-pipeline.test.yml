@@ -4,10 +4,9 @@ jobs:
     vmImage: $(vmImage)
   steps:
 
-  #todo: retrieve from  PipelineArtifacts
-  - task: DownloadPipelineArtifact@2
-    inputs:
-      artifact: drop
+  #- task: DownloadPipelineArtifact@2
+  #  inputs:
+  #    artifact: drop
 
   - task: DotNetCoreCLI@2
     displayName: dotnet test + calculate code coverage via coverlet
@@ -15,7 +14,6 @@ jobs:
       command: test
       projects: '**/*.Tests/*.csproj'
       arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
-      nobuild: true    #need to figure out PipelineArtifacts
 
   - script: echo Version.PackageMajorMinor=$(Version.PackageMajorMinor)
     displayName: DEBUG PackageMajorMinor
