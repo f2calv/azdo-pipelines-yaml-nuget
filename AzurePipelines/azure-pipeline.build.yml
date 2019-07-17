@@ -26,7 +26,7 @@ jobs:
 #todo: add in dotnet publish - handy for apps using portable framework and other types of deployment
   - task: PublishPipelineArtifact@1
     inputs:
-      path: $(System.DefaultWorkingDirectory)/bin/WebApp
+      path: $(System.DefaultWorkingDirectory)/$(ProjectName)/bin
       artifact: drop
   #- publish: $(System.DefaultWorkingDirectory)/bin/WebApp
   #  artifact: bin/WebApp
