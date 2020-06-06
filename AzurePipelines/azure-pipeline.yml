@@ -5,9 +5,9 @@ trigger:
     - master
   paths:
     include:
-    - /AzurePipelines/
-    - /MyPkgLib/
-    - /MyPkgLib.Tests/
+    - AzurePipelines
+    - MyPkgLib
+    - MyPkgLib.Tests
     exclude:
     - README.md
 
@@ -16,7 +16,7 @@ resources:
 
 variables:
   buildConfiguration: Release
-  buildPlatform: 'Any CPU'
+  buildPlatform: Any CPU
   vmImage: windows-latest
   ProjectName: MyPkgLib
   SolutionName: azdo-pipelines-yaml-nuget

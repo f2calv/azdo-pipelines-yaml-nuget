@@ -7,8 +7,8 @@ jobs:
   - task: DotNetCoreCLI@2
     displayName: dotnet restore script
     inputs:
-      command: 'restore'
-      #projects: '$(SolutionName).sln'
+      command: restore
+      #projects: $(SolutionName).sln
       projects: |
         **/$(ProjectName).csproj
         **/$(ProjectName).Tests.csproj
@@ -17,11 +17,11 @@ jobs:
     displayName: dotnet build
     inputs:
       command: build
-      #projects: '$(SolutionName).sln'
+      #projects: $(SolutionName).sln
       projects: |
         **/$(ProjectName).csproj
         **/$(ProjectName).Tests.csproj
-      arguments: '--configuration $(buildConfiguration)'
+      arguments: --configuration $(buildConfiguration)
 
 #todo: add in dotnet publish - handy for apps using portable framework and other types of deployment
   - task: PublishPipelineArtifact@1

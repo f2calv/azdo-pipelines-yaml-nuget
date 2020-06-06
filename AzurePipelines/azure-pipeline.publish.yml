@@ -8,9 +8,9 @@ jobs:
     displayName: dotnet pack
     inputs:
       command: pack
-      configuration: '$(buildConfiguration)'
+      configuration: $(buildConfiguration)
       packagesToPack: '**/$(ProjectName).csproj' # Required when command == pack
-      #packDirectory: '$(Build.ArtifactStagingDirectory)'   #this should be the Pipeline download directory but didn't figure out how to skip the second build yet
+      #packDirectory: $(Build.ArtifactStagingDirectory)   #this should be the Pipeline download directory but didn't figure out how to skip the second build yet
       versioningScheme: byEnvVar      # Options: off, byPrereleaseNumber, byEnvVar, byBuildNumber
       versionEnvVar: PackageVersion   # Required when versioningScheme == byEnvVar
       verbosityPack: normal
@@ -18,7 +18,7 @@ jobs:
 
   - task: NuGetToolInstaller@0
     inputs:
-      versionSpec: '5.0.2' 
+      versionSpec: 5.0.2
       #checkLatest: false # Optional
 
   - task: NuGetCommand@2
