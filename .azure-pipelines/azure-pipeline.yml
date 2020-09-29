@@ -48,15 +48,18 @@ jobs:
       projects: |
         **/$(ProjectName).csproj
         **/$(ProjectName).Tests.csproj
-      arguments: --configuration $(BuildConfiguration) --verbosity minimal --output $(Build.ArtifactStagingDirectory)
+      #note: when using TargetFrameworks the build output merges all output files together
+      #arguments: --configuration $(BuildConfiguration) --verbosity minimal --output $(Build.ArtifactStagingDirectory)
+      arguments: --configuration $(BuildConfiguration) --verbosity minimal
 
-  - publish: $(Build.ArtifactStagingDirectory)
- 
+  #- publish: $(Build.ArtifactStagingDirectory)
+  - publish: $(System.DefaultWorkingDirectory)/$(ProjectName)/bin
 
 - job: test
   dependsOn: build
   steps:
-
+  - checkout: none
+  - download: build
   #- task: DownloadPipelineArtifact@2
   #  inputs:
   #    artifact: drop
@@ -95,7 +98,7 @@ jobs:
       summaryFileLocation: $(Build.SourcesDirectory)/CodeCoverage/Cobertura.xml
       reportDirectory: $(Build.SourcesDirectory)/CodeCoverage/
 
-- job: publish
+- job: publish #todo: should this be a deployment job?
   dependsOn: test
   variables:
   - group: nuget-public
@@ -110,7 +113,11 @@ jobs:
   - name: PackageVersion
     value: $(Version.Major).$(Version.Minor).$(Version.Revision)
   steps:
-  
+  #todo: update csproj with the latest PackageVersion
+  - pwsh: Write-Host "123"
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    
+
   - task: DotNetCoreCLI@2
     displayName: dotnet pack
     inputs:
