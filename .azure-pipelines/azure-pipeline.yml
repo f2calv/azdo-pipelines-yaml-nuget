@@ -11,6 +11,8 @@ trigger:
   branches:
     include:
     - master
+    - hotfix
+    - feature
   paths:
     include:
     - .azure-pipelines
@@ -22,11 +24,6 @@ trigger:
 variables:
   BuildConfiguration: ${{ parameters.BuildConfiguration }}
   ProjectName: MyPkgLib
-  Version.Major: 1
-  Version.Minor: 2
-  Version.PackageMajorMinor: $(Version.Minor).$(Version.Major)-$(ProjectName)
-  Version.Revision: $[counter(variables['Version.PackageMajorMinor'], 0)]
-  PackageVersion: $(Version.Major).$(Version.Minor).$(Version.Revision)
 
 pool:
   vmImage: windows-latest
@@ -101,7 +98,17 @@ jobs:
 - job: publish
   dependsOn: test
   variables:
-    group: nuget-public
+  - group: nuget-public
+  - name: Version.Major
+    value: 1
+  - name: Version.Minor
+    value: 2
+  - name: Version.PackageMajorMinor
+    value: $(Version.Minor).$(Version.Major)-$(ProjectName)
+  - name: Version.Revision
+    value: $[counter(variables['Version.PackageMajorMinor'], 0)]
+  - name: PackageVersion
+    value: $(Version.Major).$(Version.Minor).$(Version.Revision)
   steps:
   
   - task: DotNetCoreCLI@2
