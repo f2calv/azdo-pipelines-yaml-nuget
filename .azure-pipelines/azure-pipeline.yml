@@ -1,7 +1,11 @@
 parameters:
 - name: BuildConfiguration
+  displayName: Select BuildConfiguration
   type: string
-  default: Release
+  default: release
+  values:
+  - release
+  - debug
 
 trigger:
   branches:
