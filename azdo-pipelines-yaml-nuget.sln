@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyPkgLib.Tests", "MyPkgLib.Tests\MyPkgLib.Tests.csproj", "{1DED8DD6-47B8-4B7A-9AAE-3FC5E750280A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyPkgLib.Tests", "src\MyPkgLib.Tests\MyPkgLib.Tests.csproj", "{1DED8DD6-47B8-4B7A-9AAE-3FC5E750280A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyPkgLib", "MyPkgLib\MyPkgLib.csproj", "{6CDDE33F-0767-49D9-98E9-942A592B0D76}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyPkgLib", "src\MyPkgLib\MyPkgLib.csproj", "{6CDDE33F-0767-49D9-98E9-942A592B0D76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyPkgLibApp", "MyPkgLibApp\MyPkgLibApp.csproj", "{5B587194-5E9C-46DC-A053-ABD2C85D5674}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyPkgLibApp", "src\MyPkgLibApp\MyPkgLibApp.csproj", "{5B587194-5E9C-46DC-A053-ABD2C85D5674}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
