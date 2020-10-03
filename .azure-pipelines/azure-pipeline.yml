@@ -31,48 +31,61 @@ pool:
 jobs:
 - job: build
   steps:
+  # - task: NuGetCommand@2
+  #   inputs:
+  #     command: custom
+  #     arguments: install GitVersion.CommandLine -Version 4.0.0 -OutputDirectory $(Build.BinariesDirectory)/tools -ExcludeVersion
   
+  # - script: mono $(Build.BinariesDirectory)/tools/GitVersion.CommandLine/tools/GitVersion.exe /output buildserver /nofetch
+
+  - pwsh: gitversion /output buildserver /nofetch
+  - pwsh: Write-Host "##vso[Build.UpdateBuildNumber]$(GitVersion.NuGetVersion)"
+
   #note: this dotnet restore step is actually unnecessary as dotnet build does a restore by default, left for clarity
-  - task: DotNetCoreCLI@2
-    displayName: dotnet restore script
-    inputs:
-      command: restore
-      projects: |
-        **/$(ProjectName).csproj
-        **/$(ProjectName).Tests.csproj
+  #todo: cache the output of this for faster build speed?
+  # - task: DotNetCoreCLI@2
+  #   displayName: dotnet restore script
+  #   inputs:
+  #     command: restore
+  #     projects: |
+  #       **/$(ProjectName).csproj
+  #       **/$(ProjectName).Tests.csproj
+  - pwsh: dotnet restore
   
-  - task: DotNetCoreCLI@2
-    displayName: dotnet build
-    inputs:
-      command: build
-      projects: |
-        **/$(ProjectName).csproj
-        **/$(ProjectName).Tests.csproj
-      #note: when using TargetFrameworks the build output merges all output files together
-      #arguments: --configuration $(BuildConfiguration) --verbosity minimal --output $(Build.ArtifactStagingDirectory)
-      arguments: --configuration $(BuildConfiguration) --verbosity minimal
+  # - task: DotNetCoreCLI@2
+  #   displayName: dotnet build
+  #   inputs:
+  #     command: build
+  #     projects: |
+  #       **/$(ProjectName).csproj
+  #       **/$(ProjectName).Tests.csproj
+  #     #note: when using TargetFrameworks the build output merges all output files together
+  #     #arguments: --configuration $(BuildConfiguration) --verbosity minimal --output $(Build.ArtifactStagingDirectory)
+  #     arguments: --configuration $(BuildConfiguration) --verbosity minimal
+  - pwsh: dotnet build --nologo -c $(BuildConfiguration) --verbosity minimal -p:Version='$(GitVersion.NuGetVersion)'
 
   #- publish: $(Build.ArtifactStagingDirectory)
-  - publish: $(System.DefaultWorkingDirectory)/$(ProjectName)/bin
+#  - publish: $(System.DefaultWorkingDirectory)/$(ProjectName)/bin
 
-- job: test
-  dependsOn: build
-  steps:
-  - checkout: none
-  - download: build
+# - job: test
+#   dependsOn: build
+#   steps:
+#   - checkout: none
+#   - download: build
   #- task: DownloadPipelineArtifact@2
   #  inputs:
   #    artifact: drop
 
-  - task: DotNetCoreCLI@2
-    displayName: dotnet test + calculate code coverage via coverlet
-    inputs:
-      command: test
-      projects: '**/*.Tests/*.csproj'
-      arguments: --configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+  # - task: DotNetCoreCLI@2
+  #   displayName: dotnet test + calculate code coverage via coverlet
+  #   inputs:
+  #     command: test
+  #     projects: '**/*.Tests/*.csproj'
+  #     arguments: --configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
 
-  - script: echo Version.PackageMajorMinor=$(Version.PackageMajorMinor)
-    displayName: DEBUG PackageMajorMinor
+  - pwsh: dotnet test --nologo -c $(BuildConfiguration) --no-build -p:CollectCoverage=true -p:CoverletOutputFormat=cobertura
+
+
 
   #below script is *almost* the same as the DotNetCoreCLI dotnet test above - however doesn't allow wildcard matching AND the test results don't display??
   #- script: dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj --logger trx --results-directory $(Agent.TempDirectory) --configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
@@ -98,37 +111,43 @@ jobs:
       summaryFileLocation: $(Build.SourcesDirectory)/CodeCoverage/Cobertura.xml
       reportDirectory: $(Build.SourcesDirectory)/CodeCoverage/
 
-- job: publish #todo: should this be a deployment job?
-  dependsOn: test
-  variables:
-  - group: nuget-public
-  - name: Version.Major
-    value: 1
-  - name: Version.Minor
-    value: 2
-  - name: Version.PackageMajorMinor
-    value: $(Version.Minor).$(Version.Major)-$(ProjectName)
-  - name: Version.Revision
-    value: $[counter(variables['Version.PackageMajorMinor'], 0)]
-  - name: PackageVersion
-    value: $(Version.Major).$(Version.Minor).$(Version.Revision)
-  steps:
-  #todo: update csproj with the latest PackageVersion
-  - pwsh: Write-Host "123"
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+# - job: publish #todo: should this be a deployment job?
+#   dependsOn: test
+#   variables:
+#   - group: nuget-public
+#   - name: Version.Major
+#     value: 1
+#   - name: Version.Minor
+#     value: 2
+#   - name: Version.PackageMajorMinor
+#     value: $(Version.Minor).$(Version.Major)-$(ProjectName)
+#   - name: Version.Revision
+#     value: $[counter(variables['Version.PackageMajorMinor'], 0)]
+#   - name: PackageVersion
+#     value: $(Version.Major).$(Version.Minor).$(Version.Revision)
+#   steps:
+#   #todo: update csproj with the latest PackageVersion
+#   - pwsh: Write-Host "123"
+#     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     
 
-  - task: DotNetCoreCLI@2
-    displayName: dotnet pack
-    inputs:
-      command: pack
-      configuration: $(BuildConfiguration)
-      packagesToPack: '**/$(ProjectName).csproj' # Required when command == pack
-      #packDirectory: $(Build.ArtifactStagingDirectory)   #this should be the Pipeline download directory but didn't figure out how to skip the second build yet
-      versioningScheme: byEnvVar      # Options: off, byPrereleaseNumber, byEnvVar, byBuildNumber
-      versionEnvVar: PackageVersion   # Required when versioningScheme == byEnvVar
-      verbosityPack: normal
-      #buildProperties: 'SymbolPackageFormat=snupkg'    #not needed because elements added to csproj
+  # - task: DotNetCoreCLI@2
+  #   displayName: dotnet pack
+  #   inputs:
+  #     command: pack
+  #     configuration: $(BuildConfiguration)
+  #     packagesToPack: '**/$(ProjectName).csproj' # Required when command == pack
+  #     #packDirectory: $(Build.ArtifactStagingDirectory)   #this should be the Pipeline download directory but didn't figure out how to skip the second build yet
+  #     versioningScheme: byEnvVar      # Options: off, byPrereleaseNumber, byEnvVar, byBuildNumber
+  #     versionEnvVar: PackageVersion   # Required when versioningScheme == byEnvVar
+  #     verbosityPack: normal
+  #     #buildProperties: 'SymbolPackageFormat=snupkg'    #not needed because elements added to csproj
+  - pwsh: dotnet pack --nologo -c $(BuildConfiguration) --no-build --include-symbols -p:Version='$(GitVersion.NuGetVersion)'
+  
+  - script: echo Version.PackageMajorMinor=$(Version.PackageMajorMinor)
+    displayName: DEBUG PackageMajorMinor
+
+
 
   - task: NuGetToolInstaller@0
     inputs:
