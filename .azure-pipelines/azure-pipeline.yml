@@ -26,7 +26,7 @@ variables:
   ProjectName: MyPkgLib
 
 pool:
-  vmImage: windows-latest
+  vmImage: windows-latest #because we have a .NET 4.7.2 target
 
 jobs:
 - job: build
@@ -48,8 +48,8 @@ jobs:
   - task: UseDotNet@2
     displayName: Use .NET Core sdk
     inputs:
-      packageType: sdk
       version: 5.x
+      includePreviewVersions: true
 
   #note: this dotnet restore step is actually unnecessary as dotnet build does a restore by default, left for clarity
   #todo: cache the output of this for faster build speed?
