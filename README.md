@@ -8,17 +8,23 @@
 This repository is comprised of three .NET projects - each project is *very* basic;
 - 1 x Class Library (i.e. which is packaged and deployed as a public NuGet package)
 - 1 x Unit Test Project
-- 1 x Console Application (uses to test debugging of package)
+- 1 x Console Application (used to test/debug the package)
 
-The class library is an example of multi-targeting and targets .NET Framework 2.7.2, .NET Standard 2.0 and .NET 5.0.
-The library includes references to both Entity Framework 6 and Entity Framework Core along with some compiler directives in Class1.cs as an example of how to create a multi-targeted package.
+The class library is an example of multi-targeting and targets;
+- .NET Framework 2.7.2
+- .NET Standard 2.0
+- .NET 5.0.
 
-All YAML is contained within the repository in the .azure-pipelines directory.
+The library includes references to both Entity Framework 6 and Entity Framework Core along with some compiler directives as an example of how to create a multi-targeted package.
 
-The multi-stage pipeline has 3 stages, Build, Test & Deploy(Push) which;
-1) build the class library projects
-2) run all tests and publish code coverage report
-3) pack the class library and push it either [NuGet staging server](https://int.nugettest.org/packages/MyPkgLib/) or [NuGet server](https://www.nuget.org/packages/MyPkgLib).
+The CI/CD YAML pipeline is contained within the repository in the .azure-pipelines directory.
+
+The pipeline consists of a single job which;
+1) builds all the projects
+2) runs all tests and publishes code coverage report
+3) packs the class library and pushes it either to [NuGet staging server](https://int.nugettest.org/packages/MyPkgLib/) or to [NuGet server](https://www.nuget.org/packages/MyPkgLib).
+
+The branching strategy of this repository is GitHubFlow and the pipeline uses GitVersion to control/handle the semantic versioning of each public release. When pushing a new public release (from master) the YAML build pipeline itself is tagged with the current SemVersion and a Tag is added at that commit to provide additional traceability.
 
 Sources;
 - https://docs.microsoft.com/azure/devops/pipelines/yaml-schema
