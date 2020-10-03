@@ -38,6 +38,7 @@ jobs:
   
   # - script: mono $(Build.BinariesDirectory)/tools/GitVersion.CommandLine/tools/GitVersion.exe /output buildserver /nofetch
 
+  #- pwsh: dotnet tool update -g GitVersion.Tool
   - pwsh: gitversion /output buildserver /nofetch
   - pwsh: Write-Host "##vso[Build.UpdateBuildNumber]$(GitVersion.NuGetVersion)"
 
