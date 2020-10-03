@@ -56,6 +56,9 @@ jobs:
       version: 5.x
       includePreviewVersions: true
 
+  - pwsh: dotnet --list-sdks
+    displayName: dotnet --list-sdks
+
   #note: this dotnet restore step is actually unnecessary as dotnet build does a restore by default, left for clarity
   #todo: cache the output of this for faster build speed?
   # - task: DotNetCoreCLI@2
@@ -115,7 +118,7 @@ jobs:
   # First install the tool on the machine, then run it
   - script: |
       dotnet tool install -g dotnet-reportgenerator-globaltool
-      reportgenerator -reports:$(Build.SourcesDirectory)/*.Tests/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines;Cobertura
+      reportgenerator -reports:$(Build.SourcesDirectory)/src/*.Tests/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines;Cobertura
     displayName: Create Code coverage report
 
   # Publish the code coverage result (summary and web site)
@@ -125,8 +128,8 @@ jobs:
     displayName: Publish code coverage
     inputs:
       codeCoverageTool: Cobertura
-      summaryFileLocation: $(Build.SourcesDirectory)/CodeCoverage/Cobertura.xml
-      reportDirectory: $(Build.SourcesDirectory)/CodeCoverage/
+      summaryFileLocation: $(Build.SourcesDirectory)/src/CodeCoverage/Cobertura.xml
+      reportDirectory: $(Build.SourcesDirectory)/src/CodeCoverage/
 
 # - job: publish #todo: should this be a deployment job?
 #   dependsOn: test
@@ -162,15 +165,14 @@ jobs:
   - pwsh: dotnet pack --nologo -c $(BuildConfiguration) --no-build --include-symbols -p:Version='$(GitVersion.NuGetVersion)'
     displayName: dotnet pack
 
-  - script: echo Version.PackageMajorMinor=$(Version.PackageMajorMinor)
-    displayName: DEBUG PackageMajorMinor
+  # - script: echo Version.PackageMajorMinor=$(Version.PackageMajorMinor)
+  #   displayName: DEBUG PackageMajorMinor
 
 
-
-  - task: NuGetToolInstaller@0
-    inputs:
-      versionSpec: 5.0.2
-      #checkLatest: false # Optional
+  # - task: NuGetToolInstaller@0
+  #   inputs:
+  #     versionSpec: 5.0.2
+  #     #checkLatest: false # Optional
 
   - pwsh: dotnet nuget push $(Build.ArtifactStagingDirectory)/**/*.nupkg --skip-duplicate -s https://api.nuget.org/v3/index.json --api-key $(f2calvNuGet)
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
