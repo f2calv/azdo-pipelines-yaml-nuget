@@ -22,8 +22,11 @@ trigger:
     - README.md
 
 variables:
-  BuildConfiguration: ${{ parameters.BuildConfiguration }}
-  ProjectName: MyPkgLib
+- group: nuget-public
+- name: BuildConfiguration
+  value: ${{ parameters.BuildConfiguration }}
+- name: ProjectName
+  value: MyPkgLib
 
 pool:
   vmImage: windows-latest #because we have a .NET 4.7.2 target
@@ -111,21 +114,21 @@ jobs:
   #- script: dotnet test $(Build.SourcesDirectory)\MyPkgLib.Tests\MyPkgLib.Tests.csproj --logger trx --results-directory $(Agent.TempDirectory) --configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
   #  displayName: dotnet test + calculate code coverage via coverlet
 
-  - script: dir *.cobertura.xml /S /B
-    displayName: DEBUG search for coverlet files
+  # - script: dir *.cobertura.xml /S /B
+  #   displayName: DEBUG search for coverlet files
 
   # Generate the report using ReportGenerator (https://github.com/danielpalme/ReportGenerator)
   # First install the tool on the machine, then run it
   - script: |
       dotnet tool install -g dotnet-reportgenerator-globaltool
       reportgenerator -reports:$(Build.SourcesDirectory)/src/*.Tests/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines;Cobertura
-    displayName: Create Code coverage report
+    displayName: reportgenerator
 
   # Publish the code coverage result (summary and web site)
   # The summary allows to view the coverage percentage in the summary tab
   # The web site allows to view which lines are covered directly in Azure Pipeline
   - task: PublishCodeCoverageResults@1
-    displayName: Publish code coverage
+    #displayName: Publish code coverage
     inputs:
       codeCoverageTool: Cobertura
       summaryFileLocation: $(Build.SourcesDirectory)/src/CodeCoverage/Cobertura.xml
