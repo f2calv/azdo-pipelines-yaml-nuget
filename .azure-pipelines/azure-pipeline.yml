@@ -40,7 +40,10 @@ jobs:
 
   #- pwsh: dotnet tool update -g GitVersion.Tool
   - pwsh: gitversion /output buildserver /nofetch
+    displayName: gitversion
+
   - pwsh: Write-Host "##vso[Build.UpdateBuildNumber]$(GitVersion.NuGetVersion)"
+    displayName: UpdateBuildNumber
 
   #note: this dotnet restore step is actually unnecessary as dotnet build does a restore by default, left for clarity
   #todo: cache the output of this for faster build speed?
@@ -52,6 +55,7 @@ jobs:
   #       **/$(ProjectName).csproj
   #       **/$(ProjectName).Tests.csproj
   - pwsh: dotnet restore
+    displayName: dotnet restore
   
   # - task: DotNetCoreCLI@2
   #   displayName: dotnet build
@@ -64,6 +68,7 @@ jobs:
   #     #arguments: --configuration $(BuildConfiguration) --verbosity minimal --output $(Build.ArtifactStagingDirectory)
   #     arguments: --configuration $(BuildConfiguration) --verbosity minimal
   - pwsh: dotnet build --nologo -c $(BuildConfiguration) --verbosity minimal -p:Version='$(GitVersion.NuGetVersion)'
+    displayName: dotnet build
 
   #- publish: $(Build.ArtifactStagingDirectory)
 #  - publish: $(System.DefaultWorkingDirectory)/$(ProjectName)/bin
@@ -85,7 +90,7 @@ jobs:
   #     arguments: --configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
 
   - pwsh: dotnet test --nologo -c $(BuildConfiguration) --no-build -p:CollectCoverage=true -p:CoverletOutputFormat=cobertura
-
+    displayName: dotnet test
 
 
   #below script is *almost* the same as the DotNetCoreCLI dotnet test above - however doesn't allow wildcard matching AND the test results don't display??
@@ -144,7 +149,8 @@ jobs:
   #     verbosityPack: normal
   #     #buildProperties: 'SymbolPackageFormat=snupkg'    #not needed because elements added to csproj
   - pwsh: dotnet pack --nologo -c $(BuildConfiguration) --no-build --include-symbols -p:Version='$(GitVersion.NuGetVersion)'
-  
+    displayName: dotnet pack
+
   - script: echo Version.PackageMajorMinor=$(Version.PackageMajorMinor)
     displayName: DEBUG PackageMajorMinor
 
