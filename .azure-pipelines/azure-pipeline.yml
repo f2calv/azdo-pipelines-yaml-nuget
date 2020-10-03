@@ -165,7 +165,7 @@ jobs:
   #     versionEnvVar: PackageVersion   # Required when versioningScheme == byEnvVar
   #     verbosityPack: normal
   #     #buildProperties: 'SymbolPackageFormat=snupkg'    #not needed because elements added to csproj
-  - pwsh: dotnet pack --nologo -c $(BuildConfiguration) --no-build --include-symbols -p:Version='$(GitVersion.NuGetVersion)'
+  - pwsh: dotnet pack --nologo -c $(BuildConfiguration) --no-build --include-symbols -o $(Build.ArtifactStagingDirectory) -p:Version='$(GitVersion.NuGetVersion)'
     displayName: dotnet pack
 
   # - script: echo Version.PackageMajorMinor=$(Version.PackageMajorMinor)
