@@ -32,6 +32,8 @@ pool:
 jobs:
 - job: build
   steps:
+  - checkout: self
+    persistCredentials: true
 
   #- pwsh: dotnet tool update -g GitVersion.Tool
   - pwsh: gitversion /output buildserver /nofetch
@@ -39,6 +41,9 @@ jobs:
 
   - pwsh: Write-Host "##vso[Build.UpdateBuildNumber]$(GitVersion.NuGetVersion)"
     displayName: UpdateBuildNumber
+
+  - pwsh: git push origin $(GitVersion.NuGetVersion)
+    displayName: git push origin semver
 
   - task: UseDotNet@2
     displayName: .NET Core 3.1.x SDK
