@@ -46,7 +46,12 @@ jobs:
     displayName: UpdateBuildNumber
 
   - task: UseDotNet@2
-    displayName: Use .NET Core sdk
+    displayName: .NET Core 3.1.x SDK
+    inputs:
+      version: 3.1.x
+  
+  - task: UseDotNet@2
+    displayName: .NET 5.x SDK
     inputs:
       version: 5.x
       includePreviewVersions: true
