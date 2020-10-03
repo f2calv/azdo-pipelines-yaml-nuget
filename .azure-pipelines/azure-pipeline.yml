@@ -42,7 +42,9 @@ jobs:
   - pwsh: Write-Host "##vso[Build.UpdateBuildNumber]$(GitVersion.NuGetVersion)"
     displayName: UpdateBuildNumber
 
-  - pwsh: git push origin $(GitVersion.NuGetVersion)
+  - pwsh: |
+      git tag $(GitVersion.NuGetVersion)
+      git push origin --tags
     displayName: git push origin semver
 
   - task: UseDotNet@2
