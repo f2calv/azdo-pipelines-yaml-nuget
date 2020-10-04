@@ -87,8 +87,8 @@ jobs:
     #displayName: Publish code coverage
     inputs:
       codeCoverageTool: Cobertura
-      summaryFileLocation: $(Build.SourcesDirectory)/src/CodeCoverage/Cobertura.xml
-      reportDirectory: $(Build.SourcesDirectory)/src/CodeCoverage/
+      summaryFileLocation: $(Build.SourcesDirectory)/CodeCoverage/Cobertura.xml
+      reportDirectory: $(Build.SourcesDirectory)/CodeCoverage/
 
   - pwsh: dotnet pack --nologo -c $(BuildConfiguration) --no-build --include-symbols -o $(Build.ArtifactStagingDirectory) -p:Version='$(GitVersion.NuGetVersion)'
     displayName: dotnet pack
@@ -98,5 +98,5 @@ jobs:
     displayName: dotnet nuget push (public)
 
   - pwsh: dotnet nuget push $(Build.ArtifactStagingDirectory)/**/*.nupkg --skip-duplicate -s https://apiint.nugettest.org/v3/index.json --api-key $(f2calvNuGetInt)
-    condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
-    displayName: dotnet nuget push (preview)
+    condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'), ne(variables['Build.Reason'], 'PullRequest'))
+    displayName: dotnet nuget push (private)
