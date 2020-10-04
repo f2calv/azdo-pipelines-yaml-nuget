@@ -33,7 +33,6 @@ steps:
 - checkout: self
   persistCredentials: true #persist credentials because we need to push a git tag back into the repo
 
-- pwsh: Write-Host $(Build.Repository.Name)
 #- pwsh: dotnet tool update -g GitVersion.Tool
 
 - pwsh: gitversion /output buildserver /nofetch
