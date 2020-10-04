@@ -33,6 +33,7 @@ steps:
 - checkout: self
   persistCredentials: true #persist credentials because we need to push a git tag back into the repo
 
+- pwsh: Write-Host $(Build.Repository.Name)
 #- pwsh: dotnet tool update -g GitVersion.Tool
 
 - pwsh: gitversion /output buildserver /nofetch
@@ -93,3 +94,9 @@ steps:
 - pwsh: dotnet nuget push $(Build.ArtifactStagingDirectory)/**/*.nupkg --skip-duplicate -s https://apiint.nugettest.org/v3/index.json --api-key $(f2calvNuGetInt)
   condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'), ne(variables['Build.Reason'], 'PullRequest'))
   displayName: dotnet nuget push (private)
+
+- task: GithubRelease@0
+  inputs:
+    githubConnection: f2calv
+    repositoryName: $(Build.Repository.Name)
+    tag: $(GitVersion.NuGetVersion)
