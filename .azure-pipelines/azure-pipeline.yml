@@ -34,6 +34,7 @@ steps:
   persistCredentials: true #persist credentials because we need to push a git tag back into the repo
 
 #- pwsh: dotnet tool update -g GitVersion.Tool
+
 - pwsh: gitversion /output buildserver /nofetch
   displayName: gitversion
 
@@ -56,8 +57,8 @@ steps:
     version: 5.x
     includePreviewVersions: true
 
-- pwsh: dotnet --list-sdks
-  displayName: dotnet --list-sdks
+# - pwsh: dotnet --list-sdks
+#   displayName: dotnet --list-sdks
 
 #note: the dotnet restore step is actually unnecessary as dotnet build does a restore by default, but retained for clarity
 #todo: use Cache@2 task for faster restore, but requires packages.lock.json file so skip for now...
@@ -70,22 +71,19 @@ steps:
 - pwsh: dotnet test --nologo -c $(BuildConfiguration) --no-build -p:CollectCoverage=true -p:CoverletOutputFormat=cobertura
   displayName: dotnet test
 
-# Generate the report using ReportGenerator (https://github.com/danielpalme/ReportGenerator)
-# First install the tool on the machine, then run it
 - pwsh: |
     dotnet tool install -g dotnet-reportgenerator-globaltool
     reportgenerator -reports:src/*.Tests/coverage.cobertura.xml -targetdir:CodeCoverage '-reporttypes:HtmlInline_AzurePipelines;Cobertura'
   displayName: reportgenerator
 
-# The summary allows to view the coverage percentage in the summary tab
-# The web site allows to view which lines are covered directly in Azure Pipeline
 - task: PublishCodeCoverageResults@1
   inputs:
     codeCoverageTool: Cobertura
-    summaryFileLocation: $(Build.SourcesDirectory)/CodeCoverage/Cobertura.xml
-    reportDirectory: $(Build.SourcesDirectory)/CodeCoverage/
+    summaryFileLocation: CodeCoverage/Cobertura.xml
+    reportDirectory: CodeCoverage/
 
 - pwsh: dotnet pack --nologo -c $(BuildConfiguration) --no-build --include-symbols -o $(Build.ArtifactStagingDirectory) -p:Version='$(GitVersion.NuGetVersion)'
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   displayName: dotnet pack
 
 - pwsh: dotnet nuget push $(Build.ArtifactStagingDirectory)/**/*.nupkg --skip-duplicate -s https://api.nuget.org/v3/index.json --api-key $(f2calvNuGet)
