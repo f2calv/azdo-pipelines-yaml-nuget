@@ -74,7 +74,7 @@ steps:
 # First install the tool on the machine, then run it
 - pwsh: |
     dotnet tool install -g dotnet-reportgenerator-globaltool
-    reportgenerator -reports:$(Build.SourcesDirectory)/src/*.Tests/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines;Cobertura
+    reportgenerator -reports:$(Build.SourcesDirectory)/src/*.Tests/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage '-reporttypes:HtmlInline_AzurePipelines;Cobertura'
   displayName: reportgenerator
 
 # The summary allows to view the coverage percentage in the summary tab
