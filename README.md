@@ -23,16 +23,20 @@ The pipeline consists of multiple-steps which when combined;
 2) handles the semantic versioning of the package
 3) builds all the projects
 4) runs all tests and publishes code coverage report
-5) packs the class library and pushes it either to [NuGet staging server](https://int.nugettest.org/packages/MyPkgLib/) or to [NuGet server](https://www.nuget.org/packages/MyPkgLib).
+5) packs the class library and depending on source branch pushes package to either;
+  - [NuGet staging feed](https://int.nugettest.org/packages/MyPkgLib/)
+  - [NuGet production feed](https://www.nuget.org/packages/MyPkgLib)
 
 The branching strategy of this repository is GitHubFlow and the pipeline uses GitVersion to control/handle the semantic versioning of each public release. When pushing a new public release (from master) the YAML build pipeline itself is tagged with the current SemVersion and a Tag is added at that commit to provide additional traceability.
 
-Sources;
+Resources;
 - https://docs.microsoft.com/azure/devops/pipelines/yaml-schema
 - https://docs.microsoft.com/en-us/dotnet/standard/library-guidance/nuget
-- https://blog.magnusmontin.net/2018/12/11/using-azure-pipelines-to-publish-your-github-project-to-nuget/
+- https://gitversion.net
+- http://loudandabrasive.com/effective-nuget-versioning-in-azure-devops
+- https://cloudblogs.microsoft.com/industry-blog/en-gb/technetuk/2019/06/18/perfecting-continuous-delivery-of-nuget-packages-for-azure-artifacts/
 
-Additional guidance on including PDB/Symbols and SourceLink;
+Additional guidance on including .NET PDB/Symbols and SourceLink;
 - https://blog.nuget.org/20181116/Improved-debugging-experience-with-the-NuGet-org-symbol-server-and-snupkg.html
 - https://github.com/dotnet/sourcelink#using-source-link-in-net-projects
 - https://github.com/NuGet/Home/wiki/NuGet-Package-Debugging-&-Symbols-Improvements
