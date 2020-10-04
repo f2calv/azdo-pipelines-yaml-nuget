@@ -27,75 +27,71 @@ variables:
   value: ${{ parameters.BuildConfiguration }}
 
 pool:
-  vmImage: windows-latest #because we have a .NET 4.7.2 target
+  vmImage: windows-latest #windows agent because we have a .NET Framework target
 
-jobs:
-- job: build
-  steps:
-  - checkout: self
-    persistCredentials: true
+steps:
+- checkout: self
+  persistCredentials: true #persist credentials because we need to push a git tag back into the repo
 
-  #- pwsh: dotnet tool update -g GitVersion.Tool
-  - pwsh: gitversion /output buildserver /nofetch
-    displayName: gitversion
+#- pwsh: dotnet tool update -g GitVersion.Tool
+- pwsh: gitversion /output buildserver /nofetch
+  displayName: gitversion
 
-  - pwsh: Write-Host "##vso[Build.UpdateBuildNumber]$(GitVersion.NuGetVersion)"
-    displayName: UpdateBuildNumber
+- pwsh: Write-Host "##vso[Build.UpdateBuildNumber]$(GitVersion.NuGetVersion)"
+  displayName: UpdateBuildNumber
 
-  - pwsh: |
-      git tag $(GitVersion.NuGetVersion)
-      git push origin --tags
-    displayName: git tag
+- pwsh: |
+    git tag $(GitVersion.NuGetVersion)
+    git push origin --tags
+  displayName: git tag
 
-  - task: UseDotNet@2
-    displayName: .NET Core 3.1.x SDK
-    inputs:
-      version: 3.1.x
-  
-  - task: UseDotNet@2
-    displayName: .NET 5.x SDK
-    inputs:
-      version: 5.x
-      includePreviewVersions: true
+- task: UseDotNet@2
+  displayName: .NET Core 3.1.x SDK
+  inputs:
+    version: 3.1.x
 
-  - pwsh: dotnet --list-sdks
-    displayName: dotnet --list-sdks
+- task: UseDotNet@2
+  displayName: .NET 5.x SDK
+  inputs:
+    version: 5.x
+    includePreviewVersions: true
 
-  #note: this dotnet restore step is actually unnecessary as dotnet build does a restore by default, left for clarity
-  #todo: cache the output of this for faster build speed?
-  - pwsh: dotnet restore
-    displayName: dotnet restore
-  
-  - pwsh: dotnet build --nologo -c $(BuildConfiguration) --verbosity minimal -p:Version='$(GitVersion.NuGetVersion)'
-    displayName: dotnet build
+- pwsh: dotnet --list-sdks
+  displayName: dotnet --list-sdks
 
-  - pwsh: dotnet test --nologo -c $(BuildConfiguration) --no-build -p:CollectCoverage=true -p:CoverletOutputFormat=cobertura
-    displayName: dotnet test
+#note: the dotnet restore step is actually unnecessary as dotnet build does a restore by default, but retained for clarity
+#todo: use Cache@2 task for faster restore, but requires packages.lock.json file so skip for now...
+- pwsh: dotnet restore
+  displayName: dotnet restore
 
-  # Generate the report using ReportGenerator (https://github.com/danielpalme/ReportGenerator)
-  # First install the tool on the machine, then run it
-  - script: |
-      dotnet tool install -g dotnet-reportgenerator-globaltool
-      reportgenerator -reports:$(Build.SourcesDirectory)/src/*.Tests/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines;Cobertura
-    displayName: reportgenerator
+- pwsh: dotnet build --nologo -c $(BuildConfiguration) --verbosity minimal -p:Version='$(GitVersion.NuGetVersion)'
+  displayName: dotnet build
 
-  # Publish the code coverage result (summary and web site)
-  # The summary allows to view the coverage percentage in the summary tab
-  # The web site allows to view which lines are covered directly in Azure Pipeline
-  - task: PublishCodeCoverageResults@1
-    #displayName: Publish code coverage
-    inputs:
-      codeCoverageTool: Cobertura
-      summaryFileLocation: $(Build.SourcesDirectory)/CodeCoverage/Cobertura.xml
-      reportDirectory: $(Build.SourcesDirectory)/CodeCoverage/
+- pwsh: dotnet test --nologo -c $(BuildConfiguration) --no-build -p:CollectCoverage=true -p:CoverletOutputFormat=cobertura
+  displayName: dotnet test
 
-  - pwsh: dotnet pack --nologo -c $(BuildConfiguration) --no-build --include-symbols -o $(Build.ArtifactStagingDirectory) -p:Version='$(GitVersion.NuGetVersion)'
-    displayName: dotnet pack
+# Generate the report using ReportGenerator (https://github.com/danielpalme/ReportGenerator)
+# First install the tool on the machine, then run it
+- pwsh: |
+    dotnet tool install -g dotnet-reportgenerator-globaltool
+    reportgenerator -reports:$(Build.SourcesDirectory)/src/*.Tests/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines;Cobertura
+  displayName: reportgenerator
 
-  - pwsh: dotnet nuget push $(Build.ArtifactStagingDirectory)/**/*.nupkg --skip-duplicate -s https://api.nuget.org/v3/index.json --api-key $(f2calvNuGet)
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-    displayName: dotnet nuget push (public)
+# The summary allows to view the coverage percentage in the summary tab
+# The web site allows to view which lines are covered directly in Azure Pipeline
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: $(Build.SourcesDirectory)/CodeCoverage/Cobertura.xml
+    reportDirectory: $(Build.SourcesDirectory)/CodeCoverage/
 
-  - pwsh: dotnet nuget push $(Build.ArtifactStagingDirectory)/**/*.nupkg --skip-duplicate -s https://apiint.nugettest.org/v3/index.json --api-key $(f2calvNuGetInt)
-    condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'), ne(variables['Build.Reason'], 'PullRequest'))
-    displayName: dotnet nuget push (private)
+- pwsh: dotnet pack --nologo -c $(BuildConfiguration) --no-build --include-symbols -o $(Build.ArtifactStagingDirectory) -p:Version='$(GitVersion.NuGetVersion)'
+  displayName: dotnet pack
+
+- pwsh: dotnet nuget push $(Build.ArtifactStagingDirectory)/**/*.nupkg --skip-duplicate -s https://api.nuget.org/v3/index.json --api-key $(f2calvNuGet)
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  displayName: dotnet nuget push (public)
+
+- pwsh: dotnet nuget push $(Build.ArtifactStagingDirectory)/**/*.nupkg --skip-duplicate -s https://apiint.nugettest.org/v3/index.json --api-key $(f2calvNuGetInt)
+  condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'), ne(variables['Build.Reason'], 'PullRequest'))
+  displayName: dotnet nuget push (private)
