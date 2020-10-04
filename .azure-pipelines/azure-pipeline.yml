@@ -45,8 +45,7 @@ jobs:
   - pwsh: |
       git tag $(GitVersion.NuGetVersion)
       git push origin --tags
-    displayName: git push origin semver
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    displayName: git tag
 
   - task: UseDotNet@2
     displayName: .NET Core 3.1.x SDK
