@@ -93,3 +93,10 @@ steps:
 - pwsh: dotnet nuget push $(Build.ArtifactStagingDirectory)/**/*.nupkg --skip-duplicate -s https://apiint.nugettest.org/v3/index.json --api-key $(f2calvNuGetInt)
   condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'), ne(variables['Build.Reason'], 'PullRequest'))
   displayName: dotnet nuget push (private)
+
+- task: GithubRelease@0
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  inputs:
+    githubConnection: github.com_f2calv
+    action: create
+    tag: $(GitVersion.NuGetVersion)
