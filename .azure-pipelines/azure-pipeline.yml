@@ -96,7 +96,9 @@ steps:
   displayName: dotnet nuget push (private)
 
 - task: GithubRelease@0
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   inputs:
     githubConnection: f2calv
-    repositoryName: $(Build.Repository.Name)
+    #repositoryName: $(Build.Repository.Name)
+    action: create
     tag: $(GitVersion.NuGetVersion)
