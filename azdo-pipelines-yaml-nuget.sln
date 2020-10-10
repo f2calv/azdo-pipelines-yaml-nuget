@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyPkgLib.Tests", "src\MyPkg
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyPkgLib", "src\MyPkgLib\MyPkgLib.csproj", "{6CDDE33F-0767-49D9-98E9-942A592B0D76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyPkgLibApp", "src\MyPkgLibApp\MyPkgLibApp.csproj", "{5B587194-5E9C-46DC-A053-ABD2C85D5674}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyPkgLibApp", "src\MyPkgLibApp\MyPkgLibApp.csproj", "{5B587194-5E9C-46DC-A053-ABD2C85D5674}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
