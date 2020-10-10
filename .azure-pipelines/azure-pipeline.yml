@@ -38,8 +38,10 @@ steps:
 - pwsh: gitversion /output buildserver /nofetch
   displayName: gitversion
 
-- pwsh: Write-Host "##vso[Build.UpdateBuildNumber]$(GitVersion.NuGetVersion)"
-  displayName: UpdateBuildNumber
+- pwsh: |
+    Write-Host "##vso[Build.UpdateBuildNumber]$(GitVersion.NuGetVersion)"
+    Write-Host "##vso[Build.AddBuildTag]$(GitVersion.NuGetVersion)"
+  displayName: UpdateBuildNumber / AddTag
 
 - pwsh: |
     git tag $(GitVersion.NuGetVersion)
