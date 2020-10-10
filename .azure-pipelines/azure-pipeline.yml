@@ -28,7 +28,7 @@ variables:
   - group: nuget-dev
 
 pool:
-  vmImage: windows-latest #windows agent because we have a .NET Framework target
+  vmImage: windows-latest #require windows agent because we have a .NET Framework target
 
 steps:
 - template: steps.yml

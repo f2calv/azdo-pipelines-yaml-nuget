@@ -2,6 +2,15 @@ parameters:
 - name: BuildConfiguration
   type: string
   default: release
+- name: NuGetServerFeedUrl
+  type: string
+  default: $(NuGetServerFeedUrl)
+- name: NuGetServerApiKey
+  type: string
+  default: $(NuGetServerApiKey)
+- name: ProdBranch
+  type: string
+  default: refs/heads/master #default is set for GitHubFlow branching strategy
 
 steps:
 - checkout: self
@@ -16,7 +25,7 @@ steps:
   displayName: UpdateBuildNumber
 
 - pwsh: Write-Host "##vso[Build.AddBuildTag]$(GitVersion.NuGetVersion)"
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], ${{ parameters.ProdBranch }}))
   displayName: AddTag
 
 - pwsh: |
@@ -64,12 +73,12 @@ steps:
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   displayName: dotnet pack
 
-- pwsh: dotnet nuget push $(Build.ArtifactStagingDirectory)/**/*.nupkg --skip-duplicate -s $(NuGetSourceUrl) --api-key $(NuGetServerApiKey)
-  condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), and(ne(variables['Build.SourceBranch'], 'refs/heads/master'), ne(variables['Build.Reason'], 'PullRequest'))))
+- pwsh: dotnet nuget push $(Build.ArtifactStagingDirectory)/**/*.nupkg --skip-duplicate -s $(NuGetServerFeedUrl) --api-key $(NuGetServerApiKey)
+  condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], ${{ parameters.ProdBranch }}), and(ne(variables['Build.SourceBranch'], ${{ parameters.ProdBranch }}), ne(variables['Build.Reason'], 'PullRequest'))))
   displayName: dotnet nuget push
 
 - task: GithubRelease@0
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], ${{ parameters.ProdBranch }}))
   inputs:
     githubConnection: github.com_f2calv
     action: create
