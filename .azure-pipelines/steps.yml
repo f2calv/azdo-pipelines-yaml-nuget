@@ -25,7 +25,7 @@ steps:
   displayName: UpdateBuildNumber
 
 - pwsh: Write-Host "##vso[Build.AddBuildTag]$(GitVersion.NuGetVersion)"
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], ${{ parameters.ProdBranch }}))
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], '${{ parameters.ProdBranch }}''))
   displayName: AddTag
 
 - pwsh: |
@@ -74,11 +74,11 @@ steps:
   displayName: dotnet pack
 
 - pwsh: dotnet nuget push $(Build.ArtifactStagingDirectory)/**/*.nupkg --skip-duplicate -s $(NuGetServerFeedUrl) --api-key $(NuGetServerApiKey)
-  condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], ${{ parameters.ProdBranch }}), and(ne(variables['Build.SourceBranch'], ${{ parameters.ProdBranch }}), ne(variables['Build.Reason'], 'PullRequest'))))
+  condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], '${{ parameters.ProdBranch }}'), and(ne(variables['Build.SourceBranch'], ${{ parameters.ProdBranch }}), ne(variables['Build.Reason'], 'PullRequest'))))
   displayName: dotnet nuget push
 
 - task: GithubRelease@0
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], ${{ parameters.ProdBranch }}))
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], '${{ parameters.ProdBranch }}'))
   inputs:
     githubConnection: github.com_f2calv
     action: create
