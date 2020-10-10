@@ -2,8 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <IsPackable>false</IsPackable>
+    <TargetFrameworks>net472;netstandard2.0;net5.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
