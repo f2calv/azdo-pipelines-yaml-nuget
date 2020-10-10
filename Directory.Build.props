@@ -3,6 +3,8 @@
   <PropertyGroup>
     <RootNamespace>CasCap</RootNamespace>
     <LangVersion>latest</LangVersion>
+    <!-- change the default value of IsPackable from true to false, so we must be explicit in setting it -->
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup>
