@@ -25,7 +25,7 @@ steps:
   displayName: UpdateBuildNumber
 
 - pwsh: Write-Host "##vso[Build.AddBuildTag]$(GitVersion.NuGetVersion)"
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], '${{ parameters.ProdBranch }}''))
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], '${{ parameters.ProdBranch }}'))
   displayName: AddTag
 
 - pwsh: |
