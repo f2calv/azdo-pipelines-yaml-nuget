@@ -11,15 +11,13 @@ trigger:
   branches:
     include:
     - master
-    - hotfix
-    - feature
+    - hotfix/*
+    - feature/*
   paths:
-    include:
-    - MyPkgLib
-    - MyPkgLib.Tests
     exclude:
-    - README.md
     - .azure-pipelines
+    - LICENSE
+    - README.md
 
 resources:
   repositories:
