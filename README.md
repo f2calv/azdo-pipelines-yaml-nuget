@@ -12,7 +12,7 @@ This repository is comprised of three .NET projects, these projects are to help 
 The class library multi-targets the following frameworks;
 - .NET Framework 2.7.2
 - .NET Standard 2.0
-- .NET 5.0.
+- .NET 5.0
 
 The library includes references to both Entity Framework 6 and Entity Framework Core along with some compiler directives as an example of how to create a multi-targeted package.
 
