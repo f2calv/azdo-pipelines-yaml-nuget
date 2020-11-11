@@ -26,6 +26,6 @@ namespace CasCap
         }
     }
 #if NET5
-    public record test(int id);
+    public record test(int id);//test some c# 9.0
 #endif
 }
