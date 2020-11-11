@@ -16,11 +16,10 @@ namespace CasCap.Tests
         [Fact, Trait("Category", "Performance")]
         public void TestMethod2()
         {
-            var obj = new TestClass1();
-            var hasFailed = false;
+            bool hasFailed = new();//test some c# 9.0
             try
             {
-                obj.ThrowDivideByZeroException();
+                TestClass1.ThrowDivideByZeroException();
             }
             catch
             {

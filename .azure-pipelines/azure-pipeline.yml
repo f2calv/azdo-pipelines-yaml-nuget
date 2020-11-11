@@ -35,8 +35,11 @@ variables:
 pool:
   vmImage: windows-latest #require windows agent because we have a .NET Framework target
 
+#extends:
+#  template: pipelines/dotnet.publish.nuget-v1.yml@sharedTemplates
 steps:
-- template: templates/steps.dotnet.publish.nuget-v3.yml@sharedTemplates
+- template: pipelines/dotnet.publish.nuget-v1.yml@sharedTemplates
   parameters:
     BuildConfiguration: ${{ parameters.BuildConfiguration }}
+    CoverageInclude: '[CasCap.*]*'
     gitHubConnection: github.com_f2calv
