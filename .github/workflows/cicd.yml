@@ -20,7 +20,7 @@ jobs:
       BuildConfiguration: Release
       buildLogFile: /temp/build.log
       runTests: true
-      SourcesDirectory: $GITHUB_WORKSPACE
+      SourcesDirectory: ${{ github.workspace }}
       ArtifactStagingDirectory: /artifacts
       GitVersion.NuGetVersion: 0.0.1 #will be overridden by GitVersion task?
       CoverageInclude: '*'
@@ -143,8 +143,8 @@ jobs:
     - name: reportgenerator (Linux)
       run: |
         dotnet tool update -g dotnet-reportgenerator-globaltool
-        cd $HOME/.dotnet/tools
-        ls -lsa
+        #cd $HOME/.dotnet/tools
+        #ls -lsa
         reportgenerator '-reports:${{ env.SourcesDirectory }}/src/*.Tests/coverage.*.cobertura.xml' -targetdir:${{ env.SourcesDirectory }}/CodeCoverage '-reporttypes:HtmlInline_AzurePipelines;Cobertura'
       #if: github.ref == 'refs/heads/master' #how to switch on linux
 
@@ -164,7 +164,7 @@ jobs:
 
     - name: dotnet pack
       run: dotnet pack -c ${{ env.BuildConfiguration }} --no-build --include-symbols -o ${{ env.ArtifactStagingDirectory }} -p:Version='${{ env.GitVersion.NuGetVersion }}'
-      if: false
+      #if: false
 
     # - task: CopyFiles@2
     #   inputs:
@@ -179,12 +179,16 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         path: ${{ env.ArtifactStagingDirectory }}
-      if: false
+      #if: false
 
     # - pwsh: dotnet nuget push ${{ env.ArtifactStagingDirectory }}/**/*.nupkg --skip-duplicate -s $(NuGetServerFeedUrl) --api-key $(NuGetServerApiKey)
     #   condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/head/master'), and(ne(variables['Build.SourceBranch'], 'refs/head/master'), ne(variables['Build.Reason'], 'PullRequest'))))
     #   displayName: dotnet nuget push
     #   failOnStderr: true
+
+    - name: dotnet nuget push
+      run: dotnet nuget push ${{ env.ArtifactStagingDirectory }}/**/*.nupkg --skip-duplicate -s ${{ secrets.NUGETSOURCEURL }} --api-key ${{ secrets.NUGETSERVERAPIKEY }}
+      if: false
 
     # - task: GithubRelease@0
     #   enabled: ${{ ne(parameters.githubConnection, '') }}
