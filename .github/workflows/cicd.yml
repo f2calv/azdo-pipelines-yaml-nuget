@@ -20,7 +20,7 @@ jobs:
       BuildConfiguration: Release
       buildLogFile: /temp/build.log
       runTests: true
-      SourcesDirectory: / #can probably be removed?
+      SourcesDirectory: / #can probably be removed?  $GITHUB_WORKSPACE ?
       ArtifactStagingDirectory: /artifacts
       GitVersion.NuGetVersion: 0.0.1 #will be overridden by GitVersion task?
       CoverageInclude: '*'
@@ -57,7 +57,8 @@ jobs:
     - name: GitVersion (Linux)
       run: |
         dotnet tool update -g GitVersion.Tool
-        $HOME/.dotnet/tools/dotnet-gitversion ${{ env.SourcesDirectory }} /output buildserver /nofetch
+        dotnet-gitversion
+      #$HOME/.dotnet/tools/dotnet-gitversion ${{ env.SourcesDirectory }} /output buildserver /nofetch
       #if: eq(variables['Agent.OS'], 'Linux') #how to check this in actions?
 
     # - pwsh: Write-Host "##vso[Build.UpdateBuildNumber]${{ env.GitVersion.NuGetVersion }}"
