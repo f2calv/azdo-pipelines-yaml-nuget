@@ -18,11 +18,10 @@ jobs:
     env:
       DOTNET_NOLOGO: true
       BuildConfiguration: Release
-      buildLogFile: /temp/build.log
+      buildLogFile: ${{ github.workspace }}build.log
       runTests: true
       SourcesDirectory: ${{ github.workspace }}
       ArtifactStagingDirectory: /artifacts
-      GitVersion.NuGetVersion: 0.0.1 #will be overridden by GitVersion task?
       CoverageInclude: '*'
 
     steps:
@@ -56,10 +55,17 @@ jobs:
     #   condition: eq(variables['Agent.OS'], 'Linux')
     #   displayName: GitVersion (Linux)
 
-    - name: GitVersion (Linux)
-      run: |
-        dotnet tool update -g GitVersion.Tool
-        dotnet-gitversion /output buildserver /nofetch
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0.9.7
+      with:
+        versionSpec: 5.x
+
+    - name: Determine Version
+      uses: gittools/actions/gitversion/execute@v0.9.7
+      id:   gitversion
+      with:
+        useConfigFile: true
+
       #if: eq(variables['Agent.OS'], 'Linux') #how to check this in actions?
 
     # Build.UpdateBuildNumber - not possible in actions? maybe there is an alternative/similar action?
@@ -80,7 +86,7 @@ jobs:
       run: dotnet restore --verbosity minimal --configfile nuget.config
   
     - name: dotnet build
-      run: dotnet build --no-restore -p:Version='${{ env.GitVersion.NuGetVersion }}' -p:SourceRevisionId=${{ github.GITHUB_SHA }} -c ${{ env.BuildConfiguration }} /flp:v=q /flp:logfile=${{ env.buildLogFile }}
+      run: dotnet build --no-restore -p:Version='${{ steps.gitversion.outputs.semVer }}' -p:SourceRevisionId=${{ github.GITHUB_SHA }} -c ${{ env.BuildConfiguration }} /flp:v=q /flp:logfile=${{ env.buildLogFile }}
       #if: false
 
     # - template: ../templates/steps.dotnet.warnings-v1.yml
@@ -93,28 +99,10 @@ jobs:
       run: dotnet test --no-restore --no-build -c ${{ env.BuildConfiguration }} -p:CollectCoverage=true -p:CoverletOutputFormat=cobertura #-p:Include="${{ env.CoverageInclude}}"
       #if: env.runTests == true
 
-    # - pwsh: |
-    #     dotnet tool install -g dotnet-reportgenerator-globaltool
-    #     reportgenerator -reports:${{ env.SourcesDirectory }}/src/*.Tests/coverage.*.cobertura.xml -targetdir:${{ env.SourcesDirectory }}/CodeCoverage '-reporttypes:HtmlInline_AzurePipelines;Cobertura'
-    #   condition: eq(variables['Agent.OS'], 'Windows_NT')
-    #   enabled: ${{ env.runTests }}
-    #   displayName: reportgenerator (Windows)
-    #   failOnStderr: true
-      
-    # - bash: |
-    #     dotnet tool update -g dotnet-reportgenerator-globaltool
-    #     cd $HOME/.dotnet/tools
-    #     ls -lsa
-    #     $HOME/.dotnet/tools/reportgenerator '-reports:${{ env.SourcesDirectory }}/src/*.Tests/coverage.*.cobertura.xml' -targetdir:${{ env.SourcesDirectory }}/CodeCoverage '-reporttypes:HtmlInline_AzurePipelines;Cobertura'
-    #   condition: eq(variables['Agent.OS'], 'Linux')
-    #   enabled: ${{ env.runTests }}
-    #   displayName: reportgenerator (Linux)
-
     - name: reportgenerator (Linux)
       run: |
         dotnet tool update -g dotnet-reportgenerator-globaltool
-        reportgenerator '-reports:${{ env.SourcesDirectory }}/src/*.Tests/coverage.*.cobertura.xml' -targetdir:${{ env.SourcesDirectory }}/CodeCoverage '-reporttypes:HtmlInline_AzurePipelines;Cobertura'
-      #if: github.ref == 'refs/heads/master' #how to switch on linux
+        reportgenerator '-reports:${{ env.SourcesDirectory }}/src/*.Tests/coverage.*.cobertura.xml' -targetdir:${{ env.SourcesDirectory }}/CodeCoverage '-reporttypes:Html;Cobertura'
 
     # - task: PublishCodeCoverageResults@1
     #   enabled: ${{ env.runTests }}
@@ -125,13 +113,8 @@ jobs:
 
     #^ this needs some work...
 
-    # - pwsh: dotnet pack -c ${{ env.BuildConfiguration }} --no-build --include-symbols -o ${{ env.ArtifactStagingDirectory }} -p:Version='${{ env.GitVersion.NuGetVersion }}'
-    #   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
-    #   displayName: dotnet pack
-    #   failOnStderr: true
-
     - name: dotnet pack
-      run: dotnet pack -c ${{ env.BuildConfiguration }} --no-build --include-symbols -o ${{ env.ArtifactStagingDirectory }} -p:Version='${{ env.GitVersion.NuGetVersion }}'
+      run: dotnet pack -c ${{ env.BuildConfiguration }} --no-build --include-symbols -o ${{ env.ArtifactStagingDirectory }} -p:Version='${{ steps.gitversion.outputs.semVer }}'
       #if: false
 
     # - task: CopyFiles@2
