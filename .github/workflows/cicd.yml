@@ -62,30 +62,9 @@ jobs:
         dotnet-gitversion /output buildserver /nofetch
       #if: eq(variables['Agent.OS'], 'Linux') #how to check this in actions?
 
-    # - pwsh: Write-Host "##vso[Build.UpdateBuildNumber]${{ env.GitVersion.NuGetVersion }}"
-    #   displayName: Build.UpdateBuildNumber
-    #   failOnStderr: true
+    # Build.UpdateBuildNumber - not possible in actions? maybe there is an alternative/similar action?
 
-    #^ not possible in actions? maybe there is an alternative/similar action?
-
-    # - pwsh: Write-Host "##vso[Build.AddBuildTag]${{ env.GitVersion.NuGetVersion }}"
-    #   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/head/master'))
-    #   displayName: Build.AddBuildTag
-
-    #^ not possible in actions? maybe there is an alternative/similar action?
-
-    # - pwsh: |
-    #     git tag ${{ env.GitVersion.NuGetVersion }}
-    #     git push origin --tags
-    #   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/head/master'))
-    #   displayName: git tag
-    #   failOnStderr: true
-
-    - name: git tag
-      run: |
-        git tag ${{ env.GitVersion.NuGetVersion }}
-        git push origin --tags
-      if: github.ref == 'refs/heads/master'
+    # Build.AddBuildTag - not possible in actions? maybe there is an alternative/similar action?
 
     - name: .NET Core 3.1.x SDK
       uses: actions/setup-dotnet@v1
@@ -97,20 +76,11 @@ jobs:
       with:
         dotnet-version: 5.0.x
     
-    # # - pwsh: dotnet --list-sdks
-    # #   displayName: dotnet --list-sdks
-
-    - name: git tag
-      run: |
-        dotnet --list-sdks
-        git push origin --tags
-      if: github.ref == 'refs/heads/master'
-      
     - name: dotnet restore
       run: dotnet restore --verbosity minimal --configfile nuget.config
   
     - name: dotnet build
-      run: dotnet build --no-restore -p:Version='${{ env.GitVersion.NuGetVersion }}' -p:SourceRevisionId=${{ env.GITHUB_REF }} -c ${{ env.BuildConfiguration }} /flp:v=q /flp:logfile=${{ env.buildLogFile }}
+      run: dotnet build --no-restore -p:Version='${{ env.GitVersion.NuGetVersion }}' -p:SourceRevisionId=${{ github.GITHUB_SHA }} -c ${{ env.BuildConfiguration }} /flp:v=q /flp:logfile=${{ env.buildLogFile }}
       #if: false
 
     # - template: ../templates/steps.dotnet.warnings-v1.yml
@@ -195,6 +165,12 @@ jobs:
     #     githubConnection: ${{ parameters.githubConnection }}
     #     action: create
     #     tag: ${{ env.GitVersion.NuGetVersion }}
+
+    - name: git tag
+      run: |
+        git tag ${{ env.GitVersion.NuGetVersion }}
+        git push origin --tags
+      if: github.ref == 'refs/heads/master'
 
     #https://github.com/actions/create-release
     - name: Create Release
