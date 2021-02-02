@@ -7,17 +7,18 @@ parameters:
   - release
   - debug
 
-trigger:
-  branches:
-    include:
-    - master
-    - hotfix/*
-    - feature/*
-  paths:
-    exclude:
-    - .azure-pipelines
-    - LICENSE
-    - README.md
+trigger: none
+# trigger:
+#   branches:
+#     include:
+#     - master
+#     - hotfix/*
+#     - feature/*
+#   paths:
+#     exclude:
+#     - .azure-pipelines
+#     - LICENSE
+#     - README.md
 
 resources:
   repositories:
