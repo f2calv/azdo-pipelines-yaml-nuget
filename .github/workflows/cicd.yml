@@ -20,7 +20,7 @@ jobs:
       BuildConfiguration: Release
       buildLogFile: /temp/build.log
       runTests: true
-      SourcesDirectory: / #can probably be removed?  $GITHUB_WORKSPACE ?
+      SourcesDirectory: $GITHUB_WORKSPACE
       ArtifactStagingDirectory: /artifacts
       GitVersion.NuGetVersion: 0.0.1 #will be overridden by GitVersion task?
       CoverageInclude: '*'
@@ -145,7 +145,7 @@ jobs:
         dotnet tool update -g dotnet-reportgenerator-globaltool
         cd $HOME/.dotnet/tools
         ls -lsa
-        $HOME/.dotnet/tools/reportgenerator '-reports:${{ env.SourcesDirectory }}/src/*.Tests/coverage.*.cobertura.xml' -targetdir:${{ env.SourcesDirectory }}/CodeCoverage '-reporttypes:HtmlInline_AzurePipelines;Cobertura'
+        reportgenerator '-reports:${{ env.SourcesDirectory }}/src/*.Tests/coverage.*.cobertura.xml' -targetdir:${{ env.SourcesDirectory }}/CodeCoverage '-reporttypes:HtmlInline_AzurePipelines;Cobertura'
       #if: github.ref == 'refs/heads/master' #how to switch on linux
 
     # - task: PublishCodeCoverageResults@1
