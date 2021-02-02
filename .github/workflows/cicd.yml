@@ -111,7 +111,7 @@ jobs:
   
     - name: dotnet build
       run: dotnet build --no-restore -p:Version='${{ env.GitVersion.NuGetVersion }}' -p:SourceRevisionId=${{ env.GITHUB_REF }} -c ${{ env.BuildConfiguration }} /flp:v=q /flp:logfile=${{ env.buildLogFile }}
-      if: false
+      #if: false
 
     # - template: ../templates/steps.dotnet.warnings-v1.yml
     #   parameters:
@@ -121,7 +121,7 @@ jobs:
 
     - name: dotnet test
       run: dotnet test --no-restore --no-build -c ${{ env.BuildConfiguration }} -p:CollectCoverage=true -p:CoverletOutputFormat=cobertura #-p:Include="${{ env.CoverageInclude}}"
-      if: env.runTests == true
+      #if: env.runTests == true
 
     # - pwsh: |
     #     dotnet tool install -g dotnet-reportgenerator-globaltool
@@ -143,8 +143,6 @@ jobs:
     - name: reportgenerator (Linux)
       run: |
         dotnet tool update -g dotnet-reportgenerator-globaltool
-        #cd $HOME/.dotnet/tools
-        #ls -lsa
         reportgenerator '-reports:${{ env.SourcesDirectory }}/src/*.Tests/coverage.*.cobertura.xml' -targetdir:${{ env.SourcesDirectory }}/CodeCoverage '-reporttypes:HtmlInline_AzurePipelines;Cobertura'
       #if: github.ref == 'refs/heads/master' #how to switch on linux
 
