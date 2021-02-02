@@ -28,6 +28,8 @@ jobs:
     steps:
     #https://github.com/actions/checkout
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 #required for GitVersion
 
     # - task: NuGetAuthenticate@0 #run nuget auth to allow access to private azure artifact feed
     #   condition: contains(variables['NuGetServerFeedUrl'], 'pkgs.dev.azure.com')
@@ -57,8 +59,7 @@ jobs:
     - name: GitVersion (Linux)
       run: |
         dotnet tool update -g GitVersion.Tool
-        dotnet-gitversion
-      #$HOME/.dotnet/tools/dotnet-gitversion ${{ env.SourcesDirectory }} /output buildserver /nofetch
+        dotnet-gitversion /output buildserver /nofetch
       #if: eq(variables['Agent.OS'], 'Linux') #how to check this in actions?
 
     # - pwsh: Write-Host "##vso[Build.UpdateBuildNumber]${{ env.GitVersion.NuGetVersion }}"
