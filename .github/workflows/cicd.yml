@@ -21,7 +21,7 @@ jobs:
       buildLogFile: ${{ github.workspace }}build.log
       runTests: true
       SourcesDirectory: ${{ github.workspace }}
-      ArtifactStagingDirectory: /artifacts
+      ArtifactStagingDirectory: ${{ github.workspace }}/artifacts
       CoverageInclude: '*'
 
     steps:
@@ -59,6 +59,7 @@ jobs:
       uses: gittools/actions/gitversion/setup@v0.9.7
       with:
         versionSpec: 5.x
+      if: false #don't think this step is necessary on github hosted runners
 
     - name: Determine Version
       uses: gittools/actions/gitversion/execute@v0.9.7
@@ -72,15 +73,19 @@ jobs:
 
     # Build.AddBuildTag - not possible in actions? maybe there is an alternative/similar action?
 
+    - run: dotnet --list-sdks
+
     - name: .NET Core 3.1.x SDK
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.x
+      if: false #don't think this step is necessary on github hosted runners
 
     - name: .NET Core 5.0.x SDK
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
+      if: false #don't think this step is necessary on github hosted runners
     
     - name: dotnet restore
       run: dotnet restore --verbosity minimal --configfile nuget.config
