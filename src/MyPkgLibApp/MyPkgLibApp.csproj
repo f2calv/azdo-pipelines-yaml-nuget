@@ -4,6 +4,13 @@
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net472;netstandard2.0;net5.0</TargetFrameworks>
   </PropertyGroup>
+  <!-- 
+  <ItemGroup Condition="'$(Configuration)'=='Debug'">
+    <ProjectReference Include="..\MyPkgLib\MyPkgLib.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)'=='Release'">
+    <PackageReference Include="MyPkgLib" Version="1.3.5" />
+  </ItemGroup> -->
 
   <ItemGroup>
     <PackageReference Include="MyPkgLib" Version="1.3.5" />
