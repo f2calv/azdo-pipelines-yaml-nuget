@@ -151,11 +151,11 @@ jobs:
     #   inputs:
     #     githubConnection: ${{ parameters.githubConnection }}
     #     action: create
-    #     tag: ${{ env.GitVersion.NuGetVersion }}
+    #     tag: ${{ steps.gitversion.outputs.semVer }}
 
     - name: git tag
       run: |
-        git tag ${{ env.GitVersion.NuGetVersion }}
+        git tag ${{ steps.gitversion.outputs.semVer }}
         git push origin --tags
       if: github.ref == 'refs/heads/master'
 
@@ -166,7 +166,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
-        tag_name: ${{ env.GitVersion.NuGetVersion }}
+        tag_name: ${{ steps.gitversion.outputs.semVer }}
         # release_name: Release ${{ github.ref }}
         # body: |
         #   Changes in this Release
