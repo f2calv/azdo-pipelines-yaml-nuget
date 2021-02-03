@@ -59,7 +59,6 @@ jobs:
       uses: gittools/actions/gitversion/setup@v0.9.7
       with:
         versionSpec: 5.x
-      if: false #don't think this step is necessary on github hosted runners
 
     - name: Determine Version
       uses: gittools/actions/gitversion/execute@v0.9.7
