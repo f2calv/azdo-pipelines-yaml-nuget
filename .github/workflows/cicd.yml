@@ -157,7 +157,7 @@ jobs:
       run: |
         git tag ${{ steps.gitversion.outputs.semVer }}
         git push origin --tags
-      if: github.ref == 'refs/heads/master'
+      if: false #create-release already handles the tagging
 
     #https://github.com/actions/create-release
     - name: Create Release
@@ -174,3 +174,4 @@ jobs:
         #   - Second Change
         # draft: false
         # prerelease: false
+      if: github.ref == 'refs/heads/master'
