@@ -1,5 +1,9 @@
 # Publish Multi-Targeted NuGet Package w/Azure DevOps YAML Pipeline
 
+> [!IMPORTANT]
+> This repository has been retired and is no longer maintained. It is retained for historical
+> reference and should not be treated as supported or secure production guidance.
+
 [![Build Status](https://dev.azure.com/f2calv/github/_apis/build/status/f2calv.azdo-pipelines-yaml-nuget?branchName=master)](https://dev.azure.com/f2calv/github/_build/latest?definitionId=4&branchName=master)
 [![NuGet Version](https://img.shields.io/nuget/v/MyPkgLib.svg?style=flat)](https://www.nuget.org/packages/MyPkgLib/)
 [![NuGet](https://img.shields.io/nuget/dt/MyPkgLib.svg)](https://www.nuget.org/packages/MyPkgLib)
